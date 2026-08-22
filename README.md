@@ -1,4 +1,4 @@
-# Binhotti Flow
+<!-- # Binhotti Flow
 
 Base inicial de um sistema de gestão financeira pessoal em PHP + MySQL.
 
@@ -53,4 +53,4 @@ http://localhost:8000
 7. Dashboard.
 8. Cartões e parcelas.
 9. Orçamentos mensais.
-10. Metas e projeções.
+10. Metas e projeções. -->
