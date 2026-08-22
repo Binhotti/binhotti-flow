@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
+use App\Controllers\AccountController;
 
 return [
     'GET /' => [
@@ -34,5 +35,35 @@ return [
     'POST /logout' => [
         AuthController::class,
         'logout'
+    ],
+
+    'GET /accounts' => [
+        AccountController::class,
+        'index'
+    ],
+
+    'GET /accounts/create' => [
+        AccountController::class,
+        'create'
+    ],
+
+    'POST /accounts' => [
+        AccountController::class,
+        'store'
+    ],
+
+    'GET /accounts/edit' => [
+        AccountController::class,
+        'edit'
+    ],
+
+    'POST /accounts/update' => [
+        AccountController::class,
+        'update'
+    ],
+
+    'POST /accounts/toggle' => [
+        AccountController::class,
+        'toggle'
     ],
 ];

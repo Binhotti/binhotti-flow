@@ -2,9 +2,6 @@
 
 declare(strict_types=1);
 
-use PDO;
-use PDOException;
-
 require_once dirname(__DIR__) . '/bootstrap.php';
 
 return (function (): PDO {
@@ -17,12 +14,19 @@ return (function (): PDO {
     $dsn = "mysql:host={$host};port={$port};dbname={$database};charset=utf8mb4";
 
     try {
-        return new PDO($dsn, $username, $password, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false,
-        ]);
+        return new PDO(
+            $dsn,
+            $username,
+            $password,
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false
+            ]
+        );
     } catch (PDOException $e) {
-        die('Erro ao conectar ao banco de dados.');
+        http_response_code(500);
+
+        exit('Erro ao conectar ao banco de dados.');
     }
 })();

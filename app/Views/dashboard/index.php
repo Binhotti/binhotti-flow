@@ -43,7 +43,7 @@
                     </span>
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="<?= url('/accounts') ?>" class="sidebar-link">
                     <span class="sidebar-link-icon">
                         <i data-lucide="arrow-left-right"></i>
                     </span>
@@ -53,7 +53,7 @@
                     </span>
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="<?= url('/accounts') ?>" class="sidebar-link">
                     <span class="sidebar-link-icon">
                         <i data-lucide="wallet"></i>
                     </span>
@@ -63,7 +63,7 @@
                     </span>
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="<?= url('/accounts') ?>" class="sidebar-link">
                     <span class="sidebar-link-icon">
                         <i data-lucide="credit-card"></i>
                     </span>
@@ -73,7 +73,7 @@
                     </span>
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="<?= url('/accounts') ?>" class="sidebar-link">
                     <span class="sidebar-link-icon">
                         <i data-lucide="calendar-range"></i>
                     </span>
@@ -83,7 +83,7 @@
                     </span>
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="<?= url('/accounts') ?>" class="sidebar-link">
                     <span class="sidebar-link-icon">
                         <i data-lucide="target"></i>
                     </span>
@@ -93,7 +93,7 @@
                     </span>
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="<?= url('/accounts') ?>" class="sidebar-link">
                     <span class="sidebar-link-icon">
                         <i data-lucide="chart-no-axes-combined"></i>
                     </span>
@@ -103,7 +103,7 @@
                     </span>
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="<?= url('/accounts') ?>" class="sidebar-link">
                     <span class="sidebar-link-icon">
                         <i data-lucide="sparkles"></i>
                     </span>
@@ -288,352 +288,313 @@
 
                 <section class="dashboard-grid">
 
-    <article class="dashboard-card weekly-spending-card">
-
-        <div class="dashboard-card-header">
-            <div>
-                <span class="dashboard-card-label">
-                    Gastos essa semana
-                </span>
-
-                <div class="weekly-spending-value">
-                    R$ 1.200,00
-
-                    <span class="weekly-spending-growth">
-                        <i data-lucide="trending-up"></i>
-                        60%
-                    </span>
-                </div>
-            </div>
-
-            <button
-                class="card-action-button"
-                type="button"
-                aria-label="Ver detalhes"
-            >
-                <i data-lucide="chevron-right"></i>
-            </button>
-        </div>
-
-        <div class="weekly-chart">
-
-            <div class="chart-scale">
-                <span>R$ 200</span>
-                <span>R$ 0</span>
-            </div>
-
-            <div class="chart-bars">
-
-                <div class="chart-day">
-                    <div class="bar-wrapper">
-                        <div
-                            class="chart-bar"
-                            style="height: 32%;"
-                        ></div>
-                    </div>
-
-                    <span>Seg</span>
-                </div>
-
-                <div class="chart-day">
-                    <div class="bar-wrapper">
-                        <div
-                            class="chart-bar"
-                            style="height: 88%;"
-                        ></div>
-                    </div>
-
-                    <span>Ter</span>
-                </div>
-
-                <div class="chart-day">
-                    <div class="bar-wrapper">
-                        <div
-                            class="chart-bar"
-                            style="height: 52%;"
-                        ></div>
-                    </div>
-
-                    <span>Qua</span>
-                </div>
-
-                <div class="chart-day">
-                    <div class="bar-wrapper">
-                        <div
-                            class="chart-bar empty"
-                            style="height: 10%;"
-                        ></div>
-                    </div>
-
-                    <span>Qui</span>
-                </div>
-
-                <div class="chart-day">
-                    <div class="bar-wrapper">
-                        <div
-                            class="chart-bar empty"
-                            style="height: 10%;"
-                        ></div>
-                    </div>
-
-                    <span>Sex</span>
-                </div>
-
-                <div class="chart-day">
-                    <div class="bar-wrapper">
-                        <div
-                            class="chart-bar empty"
-                            style="height: 10%;"
-                        ></div>
-                    </div>
-
-                    <span>Sáb</span>
-                </div>
-
-                <div class="chart-day">
-                    <div class="bar-wrapper">
-                        <div
-                            class="chart-bar empty"
-                            style="height: 10%;"
-                        ></div>
-                    </div>
+                    <article class="dashboard-card weekly-spending-card">
 
-                    <span>Dom</span>
-                </div>
+                        <div class="dashboard-card-header">
+                            <div>
+                                <span class="dashboard-card-label">
+                                    Gastos essa semana
+                                </span>
 
-            </div>
+                                <div class="weekly-spending-value">
+                                    R$ 1.200,00
 
-        </div>
+                                    <span class="weekly-spending-growth">
+                                        <i data-lucide="trending-up"></i>
+                                        60%
+                                    </span>
+                                </div>
+                            </div>
 
-    </article>
+                            <button class="card-action-button" type="button" aria-label="Ver detalhes">
+                                <i data-lucide="chevron-right"></i>
+                            </button>
+                        </div>
 
-    <article class="dashboard-card budget-card">
+                        <div class="weekly-chart">
 
-        <div class="dashboard-card-header">
+                            <div class="chart-scale">
+                                <span>R$ 200</span>
+                                <span>R$ 0</span>
+                            </div>
 
-            <div>
-                <span class="dashboard-card-label">
-                    Orçamento mensal
-                </span>
+                            <div class="chart-bars">
 
-                <h3>
-                    Agosto
-                </h3>
-            </div>
+                                <div class="chart-day">
+                                    <div class="bar-wrapper">
+                                        <div class="chart-bar" style="height: 32%;"></div>
+                                    </div>
 
-            <button
-                class="card-action-button"
-                type="button"
-                aria-label="Ver orçamentos"
-            >
-                <i data-lucide="chevron-right"></i>
-            </button>
+                                    <span>Seg</span>
+                                </div>
 
-        </div>
+                                <div class="chart-day">
+                                    <div class="bar-wrapper">
+                                        <div class="chart-bar" style="height: 88%;"></div>
+                                    </div>
 
-        <div class="budget-list">
+                                    <span>Ter</span>
+                                </div>
 
-            <div class="budget-item">
+                                <div class="chart-day">
+                                    <div class="bar-wrapper">
+                                        <div class="chart-bar" style="height: 52%;"></div>
+                                    </div>
 
-                <div class="budget-item-header">
-                    <div>
-                        <strong>
-                            Alimentação
-                        </strong>
+                                    <span>Qua</span>
+                                </div>
 
-                        <span>
-                            R$ 425 de R$ 600
-                        </span>
-                    </div>
+                                <div class="chart-day">
+                                    <div class="bar-wrapper">
+                                        <div class="chart-bar empty" style="height: 10%;"></div>
+                                    </div>
 
-                    <strong class="budget-percentage">
-                        71%
-                    </strong>
-                </div>
+                                    <span>Qui</span>
+                                </div>
 
-                <div class="budget-progress">
-                    <div
-                        class="budget-progress-bar"
-                        style="width: 71%;"
-                    ></div>
-                </div>
+                                <div class="chart-day">
+                                    <div class="bar-wrapper">
+                                        <div class="chart-bar empty" style="height: 10%;"></div>
+                                    </div>
 
-                <small>
-                    R$ 175 disponíveis
-                </small>
+                                    <span>Sex</span>
+                                </div>
 
-            </div>
+                                <div class="chart-day">
+                                    <div class="bar-wrapper">
+                                        <div class="chart-bar empty" style="height: 10%;"></div>
+                                    </div>
 
-            <div class="budget-item">
+                                    <span>Sáb</span>
+                                </div>
 
-                <div class="budget-item-header">
-                    <div>
-                        <strong>
-                            Lazer
-                        </strong>
+                                <div class="chart-day">
+                                    <div class="bar-wrapper">
+                                        <div class="chart-bar empty" style="height: 10%;"></div>
+                                    </div>
 
-                        <span>
-                            R$ 280 de R$ 500
-                        </span>
-                    </div>
+                                    <span>Dom</span>
+                                </div>
 
-                    <strong class="budget-percentage">
-                        56%
-                    </strong>
-                </div>
+                            </div>
 
-                <div class="budget-progress">
-                    <div
-                        class="budget-progress-bar"
-                        style="width: 56%;"
-                    ></div>
-                </div>
+                        </div>
 
-                <small>
-                    R$ 220 disponíveis
-                </small>
+                    </article>
 
-            </div>
+                    <article class="dashboard-card budget-card">
 
-        </div>
+                        <div class="dashboard-card-header">
 
-    </article>
+                            <div>
+                                <span class="dashboard-card-label">
+                                    Orçamento mensal
+                                </span>
 
-</section>
+                                <h3>
+                                    Agosto
+                                </h3>
+                            </div>
 
-<section class="dashboard-lower-grid">
+                            <button class="card-action-button" type="button" aria-label="Ver orçamentos">
+                                <i data-lucide="chevron-right"></i>
+                            </button>
 
-    <article class="dashboard-card insights-card">
+                        </div>
 
-        <div class="section-title">
-            <div class="section-title-icon">
-                <i data-lucide="sparkles"></i>
-            </div>
+                        <div class="budget-list">
 
-            <div>
-                <span>
-                    Insights financeiros
-                </span>
+                            <div class="budget-item">
 
-                <small>
-                    Com base nos seus gastos
-                </small>
-            </div>
-        </div>
+                                <div class="budget-item-header">
+                                    <div>
+                                        <strong>
+                                            Alimentação
+                                        </strong>
 
-        <div class="insights-list">
+                                        <span>
+                                            R$ 425 de R$ 600
+                                        </span>
+                                    </div>
 
-            <div class="insight-item">
-                <div class="insight-icon">
-                    <i data-lucide="trending-up"></i>
-                </div>
+                                    <strong class="budget-percentage">
+                                        71%
+                                    </strong>
+                                </div>
 
-                <div>
-                    <strong>
-                        Seus gastos aumentaram
-                    </strong>
+                                <div class="budget-progress">
+                                    <div class="budget-progress-bar" style="width: 71%;"></div>
+                                </div>
 
-                    <p>
-                        Você gastou 18% mais nesta semana do que na semana anterior.
-                    </p>
-                </div>
-            </div>
+                                <small>
+                                    R$ 175 disponíveis
+                                </small>
 
-            <div class="insight-item">
-                <div class="insight-icon">
-                    <i data-lucide="utensils"></i>
-                </div>
+                            </div>
 
-                <div>
-                    <strong>
-                        Atenção ao orçamento
-                    </strong>
+                            <div class="budget-item">
 
-                    <p>
-                        Você já utilizou 71% do orçamento de alimentação deste mês.
-                    </p>
-                </div>
-            </div>
+                                <div class="budget-item-header">
+                                    <div>
+                                        <strong>
+                                            Lazer
+                                        </strong>
 
-        </div>
+                                        <span>
+                                            R$ 280 de R$ 500
+                                        </span>
+                                    </div>
 
-    </article>
+                                    <strong class="budget-percentage">
+                                        56%
+                                    </strong>
+                                </div>
 
-    <article class="dashboard-card transactions-card">
+                                <div class="budget-progress">
+                                    <div class="budget-progress-bar" style="width: 56%;"></div>
+                                </div>
 
-        <div class="dashboard-card-header">
+                                <small>
+                                    R$ 220 disponíveis
+                                </small>
 
-            <div>
-                <span class="dashboard-card-label">
-                    Últimas transações
-                </span>
+                            </div>
 
-                <h3>
-                    Movimentações recentes
-                </h3>
-            </div>
+                        </div>
 
-            <button
-                class="card-action-button"
-                type="button"
-                aria-label="Ver todas as transações"
-            >
-                <i data-lucide="chevron-right"></i>
-            </button>
+                    </article>
 
-        </div>
+                </section>
 
-        <div class="transactions-list">
+                <section class="dashboard-lower-grid">
 
-            <div class="transaction-item">
+                    <article class="dashboard-card insights-card">
 
-                <div class="transaction-icon">
-                    <i data-lucide="utensils"></i>
-                </div>
+                        <div class="section-title">
+                            <div class="section-title-icon">
+                                <i data-lucide="sparkles"></i>
+                            </div>
 
-                <div class="transaction-info">
-                    <strong>
-                        Delivery de comida
-                    </strong>
+                            <div>
+                                <span>
+                                    Insights financeiros
+                                </span>
 
-                    <span>
-                        Alimentação • Hoje
-                    </span>
-                </div>
+                                <small>
+                                    Com base nos seus gastos
+                                </small>
+                            </div>
+                        </div>
 
-                <strong class="transaction-value expense">
-                    - R$ 42,00
-                </strong>
+                        <div class="insights-list">
 
-            </div>
+                            <div class="insight-item">
+                                <div class="insight-icon">
+                                    <i data-lucide="trending-up"></i>
+                                </div>
 
-            <div class="transaction-item">
+                                <div>
+                                    <strong>
+                                        Seus gastos aumentaram
+                                    </strong>
 
-                <div class="transaction-icon">
-                    <i data-lucide="house"></i>
-                </div>
+                                    <p>
+                                        Você gastou 18% mais nesta semana do que na semana anterior.
+                                    </p>
+                                </div>
+                            </div>
 
-                <div class="transaction-info">
-                    <strong>
-                        Hospedagem
-                    </strong>
+                            <div class="insight-item">
+                                <div class="insight-icon">
+                                    <i data-lucide="utensils"></i>
+                                </div>
 
-                    <span>
-                        Viagens • 24 de Ago
-                    </span>
-                </div>
+                                <div>
+                                    <strong>
+                                        Atenção ao orçamento
+                                    </strong>
 
-                <strong class="transaction-value expense">
-                    - R$ 120,00
-                </strong>
+                                    <p>
+                                        Você já utilizou 71% do orçamento de alimentação deste mês.
+                                    </p>
+                                </div>
+                            </div>
 
-            </div>
+                        </div>
 
-        </div>
+                    </article>
 
-    </article>
+                    <article class="dashboard-card transactions-card">
 
-</section>
+                        <div class="dashboard-card-header">
+
+                            <div>
+                                <span class="dashboard-card-label">
+                                    Últimas transações
+                                </span>
+
+                                <h3>
+                                    Movimentações recentes
+                                </h3>
+                            </div>
+
+                            <button class="card-action-button" type="button" aria-label="Ver todas as transações">
+                                <i data-lucide="chevron-right"></i>
+                            </button>
+
+                        </div>
+
+                        <div class="transactions-list">
+
+                            <div class="transaction-item">
+
+                                <div class="transaction-icon">
+                                    <i data-lucide="utensils"></i>
+                                </div>
+
+                                <div class="transaction-info">
+                                    <strong>
+                                        Delivery de comida
+                                    </strong>
+
+                                    <span>
+                                        Alimentação • Hoje
+                                    </span>
+                                </div>
+
+                                <strong class="transaction-value expense">
+                                    - R$ 42,00
+                                </strong>
+
+                            </div>
+
+                            <div class="transaction-item">
+
+                                <div class="transaction-icon">
+                                    <i data-lucide="house"></i>
+                                </div>
+
+                                <div class="transaction-info">
+                                    <strong>
+                                        Hospedagem
+                                    </strong>
+
+                                    <span>
+                                        Viagens • 24 de Ago
+                                    </span>
+                                </div>
+
+                                <strong class="transaction-value expense">
+                                    - R$ 120,00
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </section>
 
             </div>
 
