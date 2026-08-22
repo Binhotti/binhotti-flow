@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
 use App\Controllers\AccountController;
+use App\Controllers\TransactionController;
 
 return [
     'GET /' => [
@@ -65,5 +66,20 @@ return [
     'POST /accounts/toggle' => [
         AccountController::class,
         'toggle'
+    ],
+    
+    'GET /transactions' => [
+        TransactionController::class,
+        'index'
+    ],
+
+    'GET /transactions/create' => [
+        TransactionController::class,
+        'create'
+    ],
+
+    'POST /transactions' => [
+        TransactionController::class,
+        'store'
     ],
 ];

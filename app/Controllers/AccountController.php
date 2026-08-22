@@ -20,7 +20,7 @@ class AccountController
         $accounts = $accountModel->allByUser($userId);
 
         $totalBalance =
-            $accountModel->getTotalInitialBalance($userId);
+        $accountModel->getTotalCurrentBalance($userId);
 
         require BASE_PATH . '/app/Views/accounts/index.php';
     }

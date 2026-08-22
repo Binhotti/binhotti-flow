@@ -12,9 +12,13 @@ class Account
 
     public function __construct()
     {
-        $this->db = require BASE_PATH . '/config/database.php';
+        $this->db =
+            require BASE_PATH . '/config/database.php';
     }
 
+    /**
+     * Retorna todas as contas pertencentes ao usuário.
+     */
     public function allByUser(int $userId): array
     {
         $sql = '
@@ -40,6 +44,10 @@ class Account
         return $stmt->fetchAll();
     }
 
+    /**
+     * Busca uma conta específica,
+     * garantindo que ela pertence ao usuário.
+     */
     public function findByUser(
         int $accountId,
         int $userId
@@ -68,6 +76,9 @@ class Account
         return $stmt->fetch();
     }
 
+    /**
+     * Cria uma nova conta.
+     */
     public function create(
         int $userId,
         string $name,
@@ -102,9 +113,17 @@ class Account
             'initial_balance' => $initialBalance
         ]);
 
-        return (int) $this->db->lastInsertId();
+        return (int)
+            $this->db->lastInsertId();
     }
 
+    /**
+     * Atualiza os dados básicos da conta.
+     *
+     * Não alteramos initial_balance aqui,
+     * pois ele representa o ponto inicial
+     * do histórico financeiro.
+     */
     public function update(
         int $accountId,
         int $userId,
@@ -133,6 +152,9 @@ class Account
         ]);
     }
 
+    /**
+     * Ativa ou desativa uma conta.
+     */
     public function toggleActive(
         int $accountId,
         int $userId
@@ -152,12 +174,146 @@ class Account
         ]);
     }
 
-    public function getTotalInitialBalance(int $userId): float
-    {
+    /**
+     * Calcula o saldo atual de uma conta.
+     *
+     * Fórmula:
+     *
+     * saldo inicial
+     * + receitas
+     * - despesas
+     * - transferências enviadas
+     * + transferências recebidas
+     */
+    public function getCurrentBalance(
+        int $accountId,
+        int $userId
+    ): float {
         $sql = '
             SELECT
-                COALESCE(SUM(initial_balance), 0) AS total
+                a.initial_balance
+
+                + COALESCE((
+                    SELECT SUM(t.amount)
+
+                    FROM transactions t
+
+                    WHERE t.account_id = a.id
+                    AND t.user_id = :user_income
+                    AND t.type = "income"
+                    AND t.status = "paid"
+                ), 0)
+
+                - COALESCE((
+                    SELECT SUM(t.amount)
+
+                    FROM transactions t
+
+                    WHERE t.account_id = a.id
+                    AND t.user_id = :user_expense
+                    AND t.type = "expense"
+                    AND t.status = "paid"
+                ), 0)
+
+                - COALESCE((
+                    SELECT SUM(t.amount)
+
+                    FROM transactions t
+
+                    WHERE t.account_id = a.id
+                    AND t.user_id = :user_transfer_out
+                    AND t.type = "transfer"
+                    AND t.status = "paid"
+                ), 0)
+
+                + COALESCE((
+                    SELECT SUM(t.amount)
+
+                    FROM transactions t
+
+                    WHERE t.transfer_account_id = a.id
+                    AND t.user_id = :user_transfer_in
+                    AND t.type = "transfer"
+                    AND t.status = "paid"
+                ), 0)
+
+                AS current_balance
+
+            FROM accounts a
+
+            WHERE a.id = :account_id
+            AND a.user_id = :user_account
+
+            LIMIT 1
+        ';
+
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->execute([
+            'user_income' => $userId,
+            'user_expense' => $userId,
+            'user_transfer_out' => $userId,
+            'user_transfer_in' => $userId,
+            'account_id' => $accountId,
+            'user_account' => $userId
+        ]);
+
+        $balance = $stmt->fetchColumn();
+
+        if ($balance === false) {
+            return 0.0;
+        }
+
+        return (float) $balance;
+    }
+
+    /**
+     * Soma o saldo atual de todas
+     * as contas ativas do usuário.
+     */
+    public function getTotalCurrentBalance(
+        int $userId
+    ): float {
+        $accounts =
+            $this->allByUser($userId);
+
+        $total = 0.0;
+
+        foreach ($accounts as $account) {
+
+            if (!(bool) $account['is_active']) {
+                continue;
+            }
+
+            $total +=
+                $this->getCurrentBalance(
+                    (int) $account['id'],
+                    $userId
+                );
+        }
+
+        return $total;
+    }
+
+    /**
+     * Soma apenas os saldos iniciais.
+     *
+     * Vamos manter por enquanto,
+     * embora o dashboard passe a usar
+     * getTotalCurrentBalance().
+     */
+    public function getTotalInitialBalance(
+        int $userId
+    ): float {
+        $sql = '
+            SELECT
+                COALESCE(
+                    SUM(initial_balance),
+                    0
+                ) AS total
+
             FROM accounts
+
             WHERE user_id = :user_id
             AND is_active = 1
         ';
@@ -168,6 +324,7 @@ class Account
             'user_id' => $userId
         ]);
 
-        return (float) $stmt->fetchColumn();
+        return (float)
+            $stmt->fetchColumn();
     }
 }

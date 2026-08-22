@@ -1,299 +1,295 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<?php
 
-<head>
-    <meta charset="UTF-8">
+$pageTitle = 'Nova conta';
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+$pageDescription =
+    'Adicione uma conta para começar a acompanhar seu saldo.';
 
-    <title>Nova conta | Binhotti Flow</title>
+$activePage = 'accounts';
 
-    <link rel="stylesheet" href="<?= url('/assets/css/app.css') ?>">
 
-    <script src="https://unpkg.com/lucide@latest" defer></script>
-</head>
+/*
+|--------------------------------------------------------------------------
+| Ação do header
+|--------------------------------------------------------------------------
+*/
 
-<body class="dashboard-page">
+ob_start();
+?>
 
-    <div class="dashboard-shell">
+<a
+    href="<?= url('/accounts') ?>"
+    class="header-icon-button"
+    aria-label="Voltar"
+>
+    <i data-lucide="arrow-left"></i>
+</a>
 
-        <aside class="sidebar">
+<?php
 
-            <div class="sidebar-brand">
+$headerAction = ob_get_clean();
 
-                <div class="sidebar-brand-symbol">
-                    BF
-                </div>
 
-                <span class="sidebar-brand-name">
-                    Binhotti Flow
-                </span>
+require BASE_PATH . '/app/Views/layouts/header.php';
 
-            </div>
+?>
 
-            <nav class="sidebar-nav">
 
-                <a href="<?= url('/') ?>" class="sidebar-link">
-                    <span class="sidebar-link-icon">
-                        <i data-lucide="layout-dashboard"></i>
-                    </span>
+<section class="account-form-wrapper">
 
-                    <span class="sidebar-link-text">
-                        Visão geral
-                    </span>
-                </a>
+    <div class="account-form-intro">
 
-                <a href="#" class="sidebar-link">
-                    <span class="sidebar-link-icon">
-                        <i data-lucide="arrow-left-right"></i>
-                    </span>
+        <div class="account-form-icon">
+            <i data-lucide="wallet-cards"></i>
+        </div>
 
-                    <span class="sidebar-link-text">
-                        Transações
-                    </span>
-                </a>
+        <div>
 
-                <a href="<?= url('/accounts') ?>" class="sidebar-link active">
-                    <span class="sidebar-link-icon">
-                        <i data-lucide="wallet"></i>
-                    </span>
+            <h2>
+                Informações da conta
+            </h2>
 
-                    <span class="sidebar-link-text">
-                        Contas
-                    </span>
-                </a>
+            <p>
+                Você poderá editar esses dados depois.
+            </p>
 
-            </nav>
-
-        </aside>
-
-        <main class="dashboard-main">
-
-            <header class="dashboard-header">
-
-                <div class="dashboard-header-left">
-
-                    <h1>
-                        Nova conta
-                    </h1>
-
-                    <p>
-                        Adicione uma conta para começar a acompanhar seu saldo.
-                    </p>
-
-                </div>
-
-                <a href="<?= url('/accounts') ?>" class="header-icon-button" aria-label="Voltar">
-                    <i data-lucide="arrow-left"></i>
-                </a>
-
-            </header>
-
-            <div class="dashboard-content">
-
-                <section class="account-form-wrapper">
-
-                    <div class="account-form-intro">
-
-                        <div class="account-form-icon">
-                            <i data-lucide="wallet-cards"></i>
-                        </div>
-
-                        <div>
-                            <h2>
-                                Informações da conta
-                            </h2>
-
-                            <p>
-                                Você poderá editar esses dados depois.
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <?php if (!empty($_SESSION['error'])): ?>
-
-                        <div class="flash-message error">
-
-                            <?= htmlspecialchars(
-                                $_SESSION['error']
-                            ) ?>
-
-                        </div>
-
-                        <?php unset($_SESSION['error']); ?>
-
-                    <?php endif; ?>
-
-                    <form class="account-form" action="<?= url('/accounts') ?>" method="POST">
-
-                        <div class="input-group">
-
-                            <label for="name">
-                                Nome da conta
-                            </label>
-
-                            <input class="input" id="name" name="name" type="text"
-                                placeholder="Ex.: Nubank, Inter, Carteira" required>
-
-                            <small class="input-help">
-                                O nome que você quer ver no Binhotti Flow.
-                            </small>
-
-                        </div>
-
-                        <div class="input-group">
-
-                            <label for="institution">
-                                Instituição
-                            </label>
-
-                            <input class="input" id="institution" name="institution" type="text"
-                                placeholder="Ex.: Nubank, Itaú, Banco Inter">
-
-                            <small class="input-help">
-                                Esse campo é opcional.
-                            </small>
-
-                        </div>
-
-                        <div class="account-form-grid">
-
-                            <div class="input-group">
-
-                                <label for="type">
-                                    Tipo da conta
-                                </label>
-
-                                <select class="input" id="type" name="type" required>
-                                    <option value="">
-                                        Selecione
-                                    </option>
-
-                                    <option value="checking">
-                                        Conta corrente
-                                    </option>
-
-                                    <option value="savings">
-                                        Poupança
-                                    </option>
-
-                                    <option value="cash">
-                                        Dinheiro
-                                    </option>
-
-                                    <option value="investment">
-                                        Investimentos
-                                    </option>
-
-                                    <option value="other">
-                                        Outra
-                                    </option>
-                                </select>
-
-                            </div>
-
-                            <div class="input-group">
-
-                                <label for="initial_balance">
-                                    Saldo atual
-                                </label>
-
-                                <div class="money-input">
-
-                                    <span>
-                                        R$
-                                    </span>
-
-                                    <input id="initial_balance" name="initial_balance" type="text" inputmode="decimal"
-                                        placeholder="0,00" value="0,00" required>
-
-                                </div>
-
-                                <small class="input-help">
-                                    Informe quanto existe nessa conta hoje.
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                        <div class="account-form-note">
-
-                            <i data-lucide="info"></i>
-
-                            <p>
-                                Esse saldo será usado como ponto de partida.
-                                Depois, o Binhotti Flow calculará o saldo com base
-                                nas suas movimentações.
-                            </p>
-
-                        </div>
-
-                        <div class="account-form-actions">
-
-                            <a href="<?= url('/accounts') ?>" class="account-cancel-button">
-                                Cancelar
-                            </a>
-
-                            <button class="button account-save-button" type="submit">
-                                <i data-lucide="plus"></i>
-
-                                Adicionar conta
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </section>
-
-            </div>
-
-        </main>
+        </div>
 
     </div>
 
-    <script>
-        document.addEventListener(
-            'DOMContentLoaded',
-            () => {
-                lucide.createIcons();
 
-                const balanceInput =
-                    document.querySelector('#initial_balance');
+    <?php if (!empty($_SESSION['error'])): ?>
 
-                if (!balanceInput) {
-                    return;
-                }
+        <div class="flash-message error">
 
-                balanceInput.addEventListener(
-                    'input',
-                    event => {
-                        let value =
-                            event.target.value.replace(/\D/g, '');
+            <?= htmlspecialchars(
+                $_SESSION['error']
+            ) ?>
 
-                        if (value === '') {
-                            event.target.value = '0,00';
-                            return;
-                        }
+        </div>
 
-                        value =
-                            (Number(value) / 100).toLocaleString(
-                                'pt-BR',
-                                {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                }
-                            );
+        <?php unset($_SESSION['error']); ?>
 
-                        event.target.value = value;
-                    }
-                );
+    <?php endif; ?>
+
+
+    <form
+        class="account-form"
+        action="<?= url('/accounts') ?>"
+        method="POST"
+    >
+
+        <!-- NOME -->
+
+        <div class="input-group">
+
+            <label for="name">
+                Nome da conta
+            </label>
+
+            <input
+                class="input"
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Ex.: Nubank, Inter, Carteira"
+                required
+            >
+
+            <small class="input-help">
+                O nome que você quer ver no Binhotti Flow.
+            </small>
+
+        </div>
+
+
+        <!-- INSTITUIÇÃO -->
+
+        <div class="input-group">
+
+            <label for="institution">
+                Instituição
+            </label>
+
+            <input
+                class="input"
+                id="institution"
+                name="institution"
+                type="text"
+                placeholder="Ex.: Nubank, Itaú, Banco Inter"
+            >
+
+            <small class="input-help">
+                Esse campo é opcional.
+            </small>
+
+        </div>
+
+
+        <div class="account-form-grid">
+
+            <!-- TIPO -->
+
+            <div class="input-group">
+
+                <label for="type">
+                    Tipo da conta
+                </label>
+
+                <select
+                    class="input"
+                    id="type"
+                    name="type"
+                    required
+                >
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option value="checking">
+                        Conta corrente
+                    </option>
+
+                    <option value="savings">
+                        Poupança
+                    </option>
+
+                    <option value="cash">
+                        Dinheiro
+                    </option>
+
+                    <option value="investment">
+                        Investimentos
+                    </option>
+
+                    <option value="other">
+                        Outra
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- SALDO -->
+
+            <div class="input-group">
+
+                <label for="initial_balance">
+                    Saldo atual
+                </label>
+
+                <div class="money-input">
+
+                    <span>
+                        R$
+                    </span>
+
+                    <input
+                        id="initial_balance"
+                        name="initial_balance"
+                        type="text"
+                        inputmode="decimal"
+                        placeholder="0,00"
+                        value="0,00"
+                        required
+                    >
+
+                </div>
+
+                <small class="input-help">
+                    Informe quanto existe nessa conta hoje.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- NOTA -->
+
+        <div class="account-form-note">
+
+            <i data-lucide="info"></i>
+
+            <p>
+                Esse saldo será usado como ponto de partida.
+                Depois, o Binhotti Flow calculará o saldo
+                com base nas suas movimentações.
+            </p>
+
+        </div>
+
+
+        <!-- AÇÕES -->
+
+        <div class="account-form-actions">
+
+            <a
+                href="<?= url('/accounts') ?>"
+                class="account-cancel-button"
+            >
+                Cancelar
+            </a>
+
+            <button
+                class="button account-save-button"
+                type="submit"
+            >
+                <i data-lucide="plus"></i>
+
+                Adicionar conta
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<script>
+    document.addEventListener(
+        'DOMContentLoaded',
+        () => {
+            const balanceInput =
+                document.querySelector('#initial_balance');
+
+            if (!balanceInput) {
+                return;
             }
-        );
-    </script>
 
-</body>
+            balanceInput.addEventListener(
+                'input',
+                event => {
+                    let value =
+                        event.target.value.replace(/\D/g, '');
 
-</html>
+                    if (value === '') {
+                        event.target.value = '0,00';
+                        return;
+                    }
+
+                    value =
+                        (Number(value) / 100).toLocaleString(
+                            'pt-BR',
+                            {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }
+                        );
+
+                    event.target.value = value;
+                }
+            );
+        }
+    );
+</script>
+
+
+<?php
+
+require BASE_PATH . '/app/Views/layouts/footer.php';
+
+?>
