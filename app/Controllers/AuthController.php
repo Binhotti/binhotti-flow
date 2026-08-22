@@ -24,25 +24,40 @@ class AuthController
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
 
-        if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 8) {
+        if (
+            $name === '' ||
+            !filter_var($email, FILTER_VALIDATE_EMAIL) ||
+            strlen($password) < 8
+        ) {
             $_SESSION['error'] = 'Preencha os campos corretamente.';
-            header('Location: /register');
-            exit;
+
+            redirect('/register');
         }
 
         $userModel = new User();
 
         if ($userModel->findByEmail($email)) {
             $_SESSION['error'] = 'Este e-mail já está cadastrado.';
-            header('Location: /register');
-            exit;
+
+            redirect('/register');
         }
 
-        $userId = $userModel->create($name, $email, password_hash($password, PASSWORD_DEFAULT));
+        $passwordHash = password_hash(
+            $password,
+            PASSWORD_DEFAULT
+        );
+
+        $userId = $userModel->create(
+            $name,
+            $email,
+            $passwordHash
+        );
+
+        session_regenerate_id(true);
 
         $_SESSION['user_id'] = $userId;
-        header('Location: /');
-        exit;
+
+        redirect('/');
     }
 
     public function login(): void
@@ -50,27 +65,35 @@ class AuthController
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
 
-        $user = (new User())->findByEmail($email);
+        $userModel = new User();
 
-        if (!$user || !password_verify($password, $user['password_hash'])) {
+        $user = $userModel->findByEmail($email);
+
+        if (
+            !$user ||
+            !password_verify(
+                $password,
+                $user['password_hash']
+            )
+        ) {
             $_SESSION['error'] = 'E-mail ou senha inválidos.';
-            header('Location: /login');
-            exit;
+
+            redirect('/login');
         }
 
         session_regenerate_id(true);
+
         $_SESSION['user_id'] = (int) $user['id'];
 
-        header('Location: /');
-        exit;
+        redirect('/');
     }
 
     public function logout(): void
     {
         $_SESSION = [];
+
         session_destroy();
 
-        header('Location: /login');
-        exit;
+        redirect('/login');
     }
 }

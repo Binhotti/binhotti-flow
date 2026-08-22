@@ -15,6 +15,7 @@ spl_autoload_register(function (string $class): void {
     }
 
     $relativeClass = substr($class, strlen($prefix));
+
     $file = $baseDir . str_replace('\\', '/', $relativeClass) . '.php';
 
     if (file_exists($file)) {
@@ -28,22 +29,63 @@ function env(string $key, mixed $default = null): mixed
 
     if ($values === null) {
         $values = [];
+
         $envFile = BASE_PATH . '/.env';
 
         if (file_exists($envFile)) {
-            foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+            foreach (
+                file(
+                    $envFile,
+                    FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
+                ) as $line
+            ) {
                 $line = trim($line);
 
-                if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
+                if (
+                    $line === '' ||
+                    str_starts_with($line, '#') ||
+                    !str_contains($line, '=')
+                ) {
                     continue;
                 }
 
-                [$envKey, $envValue] = array_map('trim', explode('=', $line, 2));
-                $envValue = trim($envValue, "\"'");
-                $values[$envKey] = $envValue;
+                [$envKey, $envValue] = explode('=', $line, 2);
+
+                $values[trim($envKey)] = trim(
+                    trim($envValue),
+                    "\"'"
+                );
             }
         }
     }
 
     return $values[$key] ?? $default;
+}
+
+function url(string $path = ''): string
+{
+    $baseUrl = rtrim(
+        env(
+            'APP_URL',
+            'http://localhost/binhotti-flow/public'
+        ),
+        '/'
+    );
+
+    $path = ltrim($path, '/');
+
+    if ($path === '') {
+        return $baseUrl;
+    }
+
+    return $baseUrl . '/' . $path;
+}
+
+function redirect(string $path): never
+{
+    header(
+        'Location: ' . url($path)
+    );
+
+    exit;
 }
