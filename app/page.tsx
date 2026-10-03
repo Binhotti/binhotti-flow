@@ -1,2 +1,178 @@
-import Link from "next/link";import {ArrowDownLeft,ArrowRightLeft,ArrowUpRight,Landmark,ReceiptText,TrendingDown,TrendingUp,WalletCards} from "lucide-react";import {Shell} from "@/components/shell";import {requireUser} from "@/lib/auth";import {formatDate,formatMoney} from "@/lib/money";import {prisma} from "@/lib/prisma";
-export default async function Dashboard(){const user=await requireUser();const [accounts,transactions]=await Promise.all([prisma.account.findMany({where:{userId:user.id,isActive:true},include:{outgoingTransactions:{where:{status:"paid"}},incomingTransfers:{where:{status:"paid"}}}}),prisma.transaction.findMany({where:{userId:user.id},include:{account:true,transferAccount:true},orderBy:[{transactionDate:"desc"},{createdAt:"desc"}],take:6})]);const accountBalance=(a:typeof accounts[number])=>Number(a.initialBalance)+a.outgoingTransactions.reduce((s,t)=>s+(t.type==="income"?Number(t.amount):-Number(t.amount)),0)+a.incomingTransfers.reduce((s,t)=>s+Number(t.amount),0);const balance=accounts.reduce((s,a)=>s+accountBalance(a),0),start=new Date(Date.UTC(new Date().getUTCFullYear(),new Date().getUTCMonth(),1)),current=transactions.filter(t=>t.transactionDate>=start),income=current.filter(t=>t.type==="income").reduce((s,t)=>s+Number(t.amount),0),expenses=current.filter(t=>t.type==="expense").reduce((s,t)=>s+Number(t.amount),0);return <Shell title={`Olá, ${user.name.split(" ")[0]}`} description="Aqui está o panorama das suas finanças." action={{href:"/transactions/new",label:"Nova transação"}}><section className="hero-balance"><div><span>Saldo total disponível</span><strong>{formatMoney(balance)}</strong><small>Em {accounts.length} {accounts.length===1?"conta ativa":"contas ativas"}</small></div><WalletCards/></section><section className="stats-grid"><article className="stat"><span><TrendingUp/> Receitas no mês</span><strong className="positive">{formatMoney(income)}</strong></article><article className="stat"><span><TrendingDown/> Despesas no mês</span><strong>{formatMoney(expenses)}</strong></article><article className="stat"><span><Landmark/> Resultado mensal</span><strong className={income-expenses>=0?"positive":"negative"}>{formatMoney(income-expenses)}</strong></article></section><section className="dashboard-grid"><article className="card"><div className="card-head"><div><p className="eyebrow">MOVIMENTAÇÕES</p><h2>Últimas transações</h2></div><Link href="/transactions">Ver todas</Link></div>{transactions.length?<div className="transaction-list">{transactions.map(t=><div className="transaction" key={t.id}><span className={`transaction-icon ${t.type}`}>{t.type==="income"?<ArrowDownLeft/>:t.type==="transfer"?<ArrowRightLeft/>:<ArrowUpRight/>}</span><div><strong>{t.description}</strong><small>{t.account.name}{t.transferAccount?` → ${t.transferAccount.name}`:""} · {formatDate(t.transactionDate)}</small></div><b className={t.type==="income"?"positive":""}>{t.type==="income"?"+ ":t.type==="expense"?"− ":""}{formatMoney(t.amount)}</b></div>)}</div>:<div className="empty"><ReceiptText/><p>Nenhuma transação ainda.</p><Link className="text-link" href="/transactions/new">Começar agora</Link></div>}</article><article className="card"><div className="card-head"><div><p className="eyebrow">SUAS CONTAS</p><h2>Patrimônio por conta</h2></div><Link href="/accounts">Gerenciar</Link></div>{accounts.length?<div className="account-mini-list">{accounts.map(a=><div key={a.id}><span className="account-dot"/><div><strong>{a.name}</strong><small>{a.institution??"Sem instituição"}</small></div><b>{formatMoney(accountBalance(a))}</b></div>)}</div>:<div className="empty"><WalletCards/><p>Adicione sua primeira conta.</p><Link className="text-link" href="/accounts/new">Começar agora</Link></div>}</article></section></Shell>}
+import Link from "next/link";
+import {
+  ArrowDownLeft,
+  ArrowRightLeft,
+  ArrowUpRight,
+  Landmark,
+  ReceiptText,
+  TrendingDown,
+  TrendingUp,
+  WalletCards,
+} from "lucide-react";
+import { Shell } from "@/components/shell";
+import { requireUser } from "@/lib/auth";
+import { formatDate, formatMoney } from "@/lib/money";
+import { prisma } from "@/lib/prisma";
+export default async function Dashboard() {
+  const user = await requireUser();
+  const [accounts, transactions] = await Promise.all([
+    prisma.account.findMany({
+      where: { userId: user.id, isActive: true },
+      include: {
+        outgoingTransactions: { where: { status: "paid" } },
+        incomingTransfers: { where: { status: "paid" } },
+      },
+    }),
+    prisma.transaction.findMany({
+      where: { userId: user.id },
+      include: { account: true, transferAccount: true },
+      orderBy: [{ transactionDate: "desc" }, { createdAt: "desc" }],
+      take: 6,
+    }),
+  ]);
+  const accountBalance = (a: (typeof accounts)[number]) =>
+    Number(a.initialBalance) +
+    a.outgoingTransactions.reduce(
+      (s, t) =>
+        s + (t.type === "income" ? Number(t.amount) : -Number(t.amount)),
+      0,
+    ) +
+    a.incomingTransfers.reduce((s, t) => s + Number(t.amount), 0);
+  const balance = accounts.reduce((s, a) => s + accountBalance(a), 0),
+    start = new Date(
+      Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1),
+    ),
+    current = transactions.filter((t) => t.transactionDate >= start),
+    income = current
+      .filter((t) => t.type === "income")
+      .reduce((s, t) => s + Number(t.amount), 0),
+    expenses = current
+      .filter((t) => t.type === "expense")
+      .reduce((s, t) => s + Number(t.amount), 0);
+  return (
+    <Shell
+      title={`Olá, ${user.name.split(" ")[0]}`}
+      description="Aqui está o panorama das suas finanças."
+      action={{ href: "/transactions/new", label: "Nova transação" }}
+    >
+      <section className="hero-balance">
+        <div>
+          <span>Saldo total disponível</span>
+          <strong>{formatMoney(balance)}</strong>
+          <small>
+            Em {accounts.length}{" "}
+            {accounts.length === 1 ? "conta ativa" : "contas ativas"}
+          </small>
+        </div>
+        <WalletCards />
+      </section>
+      <section className="stats-grid">
+        <article className="stat">
+          <span>
+            <TrendingUp /> Receitas no mês
+          </span>
+          <strong className="positive">{formatMoney(income)}</strong>
+        </article>
+        <article className="stat">
+          <span>
+            <TrendingDown /> Despesas no mês
+          </span>
+          <strong>{formatMoney(expenses)}</strong>
+        </article>
+        <article className="stat">
+          <span>
+            <Landmark /> Resultado mensal
+          </span>
+          <strong className={income - expenses >= 0 ? "positive" : "negative"}>
+            {formatMoney(income - expenses)}
+          </strong>
+        </article>
+      </section>
+      <section className="dashboard-grid">
+        <article className="card">
+          <div className="card-head">
+            <div>
+              <p className="eyebrow">MOVIMENTAÇÕES</p>
+              <h2>Últimas transações</h2>
+            </div>
+            <Link href="/transactions">Ver todas</Link>
+          </div>
+          {transactions.length ? (
+            <div className="transaction-list">
+              {transactions.map((t) => (
+                <div className="transaction" key={t.id}>
+                  <span className={`transaction-icon ${t.type}`}>
+                    {t.type === "income" ? (
+                      <ArrowDownLeft />
+                    ) : t.type === "transfer" ? (
+                      <ArrowRightLeft />
+                    ) : (
+                      <ArrowUpRight />
+                    )}
+                  </span>
+                  <div>
+                    <strong>{t.description}</strong>
+                    <small>
+                      {t.account.name}
+                      {t.transferAccount
+                        ? ` → ${t.transferAccount.name}`
+                        : ""}{" "}
+                      · {formatDate(t.transactionDate)}
+                    </small>
+                  </div>
+                  <b className={t.type === "income" ? "positive" : ""}>
+                    {t.type === "income"
+                      ? "+ "
+                      : t.type === "expense"
+                        ? "− "
+                        : ""}
+                    {formatMoney(t.amount)}
+                  </b>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="empty">
+              <ReceiptText />
+              <p>Nenhuma transação ainda.</p>
+              <Link className="text-link" href="/transactions/new">
+                Começar agora
+              </Link>
+            </div>
+          )}
+        </article>
+        <article className="card">
+          <div className="card-head">
+            <div>
+              <p className="eyebrow">SUAS CONTAS</p>
+              <h2>Patrimônio por conta</h2>
+            </div>
+            <Link href="/accounts">Gerenciar</Link>
+          </div>
+          {accounts.length ? (
+            <div className="account-mini-list">
+              {accounts.map((a) => (
+                <div key={a.id}>
+                  <span className="account-dot" />
+                  <div>
+                    <strong>{a.name}</strong>
+                    <small>{a.institution ?? "Sem instituição"}</small>
+                  </div>
+                  <b>{formatMoney(accountBalance(a))}</b>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="empty">
+              <WalletCards />
+              <p>Adicione sua primeira conta.</p>
+              <Link className="text-link" href="/accounts/new">
+                Começar agora
+              </Link>
+            </div>
+          )}
+        </article>
+      </section>
+    </Shell>
+  );
+}

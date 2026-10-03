@@ -1,1 +1,70 @@
-import Link from "next/link";import {createAccount} from "@/app/actions";import {Flash} from "@/components/flash";import {Shell} from "@/components/shell";import {requireUser} from "@/lib/auth";export default async function NewAccount({searchParams}:{searchParams:Promise<{error?:string}>}){await requireUser();const {error}=await searchParams;return <Shell title="Nova conta" description="Adicione uma conta para acompanhar o saldo."><div className="form-card"><Flash error={error}/><form action={createAccount} className="form"><label>Nome da conta<input name="name" placeholder="Ex.: Nubank, Inter, Carteira" required/></label><label>Instituição <span>(opcional)</span><input name="institution" placeholder="Ex.: Nubank, Itaú, Banco Inter"/></label><div className="form-grid"><label>Tipo<select name="type" required defaultValue=""><option value="" disabled>Selecione</option><option value="checking">Conta corrente</option><option value="savings">Poupança</option><option value="cash">Dinheiro</option><option value="investment">Investimentos</option><option value="other">Outra</option></select></label><label>Saldo atual<input name="initialBalance" inputMode="decimal" defaultValue="0,00" required/></label></div><div className="form-actions"><Link href="/accounts" className="secondary-button">Cancelar</Link><button className="button">Adicionar conta</button></div></form></div></Shell>}
+import Link from "next/link";
+import { createAccount } from "@/app/actions";
+import { Flash } from "@/components/flash";
+import { Shell } from "@/components/shell";
+import { requireUser } from "@/lib/auth";
+export default async function NewAccount({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  await requireUser();
+  const { error } = await searchParams;
+  return (
+    <Shell
+      title="Nova conta"
+      description="Adicione uma conta para acompanhar o saldo."
+    >
+      <div className="form-card">
+        <Flash error={error} />
+        <form action={createAccount} className="form">
+          <label>
+            Nome da conta
+            <input
+              name="name"
+              placeholder="Ex.: Nubank, Inter, Carteira"
+              required
+            />
+          </label>
+          <label>
+            Instituição <span>(opcional)</span>
+            <input
+              name="institution"
+              placeholder="Ex.: Nubank, Itaú, Banco Inter"
+            />
+          </label>
+          <div className="form-grid">
+            <label>
+              Tipo
+              <select name="type" required defaultValue="">
+                <option value="" disabled>
+                  Selecione
+                </option>
+                <option value="checking">Conta corrente</option>
+                <option value="savings">Poupança</option>
+                <option value="cash">Dinheiro</option>
+                <option value="investment">Investimentos</option>
+                <option value="other">Outra</option>
+              </select>
+            </label>
+            <label>
+              Saldo atual
+              <input
+                name="initialBalance"
+                inputMode="decimal"
+                defaultValue="0,00"
+                required
+              />
+            </label>
+          </div>
+          <div className="form-actions">
+            <Link href="/accounts" className="secondary-button">
+              Cancelar
+            </Link>
+            <button className="button">Adicionar conta</button>
+          </div>
+        </form>
+      </div>
+    </Shell>
+  );
+}

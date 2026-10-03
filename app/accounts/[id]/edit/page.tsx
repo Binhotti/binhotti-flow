@@ -1,1 +1,54 @@
-import Link from "next/link";import {notFound} from "next/navigation";import {updateAccount} from "@/app/actions";import {Shell} from "@/components/shell";import {requireUser} from "@/lib/auth";import {prisma} from "@/lib/prisma";export default async function EditAccount({params}:{params:Promise<{id:string}>}){const user=await requireUser(),{id}=await params,account=await prisma.account.findFirst({where:{id,userId:user.id}});if(!account)notFound();return <Shell title="Editar conta" description="Atualize os dados da sua conta."><div className="form-card"><form action={updateAccount} className="form"><input type="hidden" name="id" value={account.id}/><label>Nome da conta<input name="name" defaultValue={account.name} required/></label><label>Instituição <span>(opcional)</span><input name="institution" defaultValue={account.institution??""}/></label><label>Tipo<select name="type" defaultValue={account.type}><option value="checking">Conta corrente</option><option value="savings">Poupança</option><option value="cash">Dinheiro</option><option value="investment">Investimentos</option><option value="other">Outra</option></select></label><div className="form-actions"><Link href="/accounts" className="secondary-button">Cancelar</Link><button className="button">Salvar alterações</button></div></form></div></Shell>}
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { updateAccount } from "@/app/actions";
+import { Shell } from "@/components/shell";
+import { requireUser } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+export default async function EditAccount({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const user = await requireUser(),
+    { id } = await params,
+    account = await prisma.account.findFirst({
+      where: { id, userId: user.id },
+    });
+  if (!account) notFound();
+  return (
+    <Shell title="Editar conta" description="Atualize os dados da sua conta.">
+      <div className="form-card">
+        <form action={updateAccount} className="form">
+          <input type="hidden" name="id" value={account.id} />
+          <label>
+            Nome da conta
+            <input name="name" defaultValue={account.name} required />
+          </label>
+          <label>
+            Instituição <span>(opcional)</span>
+            <input
+              name="institution"
+              defaultValue={account.institution ?? ""}
+            />
+          </label>
+          <label>
+            Tipo
+            <select name="type" defaultValue={account.type}>
+              <option value="checking">Conta corrente</option>
+              <option value="savings">Poupança</option>
+              <option value="cash">Dinheiro</option>
+              <option value="investment">Investimentos</option>
+              <option value="other">Outra</option>
+            </select>
+          </label>
+          <div className="form-actions">
+            <Link href="/accounts" className="secondary-button">
+              Cancelar
+            </Link>
+            <button className="button">Salvar alterações</button>
+          </div>
+        </form>
+      </div>
+    </Shell>
+  );
+}

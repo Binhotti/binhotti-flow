@@ -1,2 +1,95 @@
-import Link from "next/link";import {Building2,Pencil,Power,WalletCards} from "lucide-react";import {toggleAccount} from "@/app/actions";import {Flash} from "@/components/flash";import {Shell} from "@/components/shell";import {requireUser} from "@/lib/auth";import {formatMoney} from "@/lib/money";import {prisma} from "@/lib/prisma";const labels:Record<string,string>={checking:"Conta corrente",savings:"Poupança",cash:"Dinheiro",investment:"Investimento",other:"Outra"};
-export default async function AccountsPage({searchParams}:{searchParams:Promise<{success?:string;error?:string}>}){const user=await requireUser(),params=await searchParams,accounts=await prisma.account.findMany({where:{userId:user.id},include:{outgoingTransactions:{where:{status:"paid"}},incomingTransfers:{where:{status:"paid"}}},orderBy:[{isActive:"desc"},{createdAt:"asc"}]});return <Shell title="Contas" description="Acompanhe onde seu dinheiro está." action={{href:"/accounts/new",label:"Nova conta"}}><Flash {...params}/><div className="accounts-grid">{accounts.map(a=>{const balance=Number(a.initialBalance)+a.outgoingTransactions.reduce((s,t)=>s+(t.type==="income"?Number(t.amount):-Number(t.amount)),0)+a.incomingTransfers.reduce((s,t)=>s+Number(t.amount),0);return <article className={`account-card ${!a.isActive?"inactive":""}`} key={a.id}><div className="account-card-top"><span className="account-logo"><Building2/></span><span className={`badge ${a.isActive?"active":""}`}>{a.isActive?"Ativa":"Inativa"}</span></div><small>{labels[a.type]}</small><h2>{a.name}</h2><p>{a.institution??"Sem instituição"}</p><div className="account-balance"><span>Saldo atual</span><strong>{formatMoney(balance)}</strong></div><div className="account-actions"><Link href={`/accounts/${a.id}/edit`}><Pencil/> Editar</Link><form action={toggleAccount}><input type="hidden" name="id" value={a.id}/><button><Power/> {a.isActive?"Desativar":"Ativar"}</button></form></div></article>})}{!accounts.length&&<div className="card empty wide"><WalletCards/><p>Você ainda não adicionou nenhuma conta.</p><Link className="button" href="/accounts/new">Adicionar primeira conta</Link></div>}</div></Shell>}
+import Link from "next/link";
+import { Building2, Pencil, Power, WalletCards } from "lucide-react";
+import { toggleAccount } from "@/app/actions";
+import { Flash } from "@/components/flash";
+import { Shell } from "@/components/shell";
+import { requireUser } from "@/lib/auth";
+import { formatMoney } from "@/lib/money";
+import { prisma } from "@/lib/prisma";
+const labels: Record<string, string> = {
+  checking: "Conta corrente",
+  savings: "Poupança",
+  cash: "Dinheiro",
+  investment: "Investimento",
+  other: "Outra",
+};
+export default async function AccountsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ success?: string; error?: string }>;
+}) {
+  const user = await requireUser(),
+    params = await searchParams,
+    accounts = await prisma.account.findMany({
+      where: { userId: user.id },
+      include: {
+        outgoingTransactions: { where: { status: "paid" } },
+        incomingTransfers: { where: { status: "paid" } },
+      },
+      orderBy: [{ isActive: "desc" }, { createdAt: "asc" }],
+    });
+  return (
+    <Shell
+      title="Contas"
+      description="Acompanhe onde seu dinheiro está."
+      action={{ href: "/accounts/new", label: "Nova conta" }}
+    >
+      <Flash {...params} />
+      <div className="accounts-grid">
+        {accounts.map((a) => {
+          const balance =
+            Number(a.initialBalance) +
+            a.outgoingTransactions.reduce(
+              (s, t) =>
+                s +
+                (t.type === "income" ? Number(t.amount) : -Number(t.amount)),
+              0,
+            ) +
+            a.incomingTransfers.reduce((s, t) => s + Number(t.amount), 0);
+          return (
+            <article
+              className={`account-card ${!a.isActive ? "inactive" : ""}`}
+              key={a.id}
+            >
+              <div className="account-card-top">
+                <span className="account-logo">
+                  <Building2 />
+                </span>
+                <span className={`badge ${a.isActive ? "active" : ""}`}>
+                  {a.isActive ? "Ativa" : "Inativa"}
+                </span>
+              </div>
+              <small>{labels[a.type]}</small>
+              <h2>{a.name}</h2>
+              <p>{a.institution ?? "Sem instituição"}</p>
+              <div className="account-balance">
+                <span>Saldo atual</span>
+                <strong>{formatMoney(balance)}</strong>
+              </div>
+              <div className="account-actions">
+                <Link href={`/accounts/${a.id}/edit`}>
+                  <Pencil /> Editar
+                </Link>
+                <form action={toggleAccount}>
+                  <input type="hidden" name="id" value={a.id} />
+                  <button>
+                    <Power /> {a.isActive ? "Desativar" : "Ativar"}
+                  </button>
+                </form>
+              </div>
+            </article>
+          );
+        })}
+        {!accounts.length && (
+          <div className="card empty wide">
+            <WalletCards />
+            <p>Você ainda não adicionou nenhuma conta.</p>
+            <Link className="button" href="/accounts/new">
+              Adicionar primeira conta
+            </Link>
+          </div>
+        )}
+      </div>
+    </Shell>
+  );
+}
