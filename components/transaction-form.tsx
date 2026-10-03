@@ -86,7 +86,21 @@ export function TransactionForm({
             required
           />
         </label>
+        <label>
+          Situação
+          <select name="status" defaultValue="paid">
+            <option value="paid">Pago / recebido</option>
+            <option value="pending">Pendente</option>
+          </select>
+        </label>
       </div>
+      <label>
+        Observações <span>Opcional</span>
+        <input
+          name="notes"
+          placeholder="Adicione um detalhe para lembrar depois"
+        />
+      </label>
       <div className="form-actions">
         <Link href="/transactions" className="secondary-button">
           Cancelar

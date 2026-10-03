@@ -3,7 +3,9 @@ import {
   ArrowRightLeft,
   ArrowUpRight,
   ReceiptText,
+  Trash2,
 } from "lucide-react";
+import { deleteTransaction } from "@/app/actions";
 import { Flash } from "@/components/flash";
 import { Shell } from "@/components/shell";
 import { requireUser } from "@/lib/auth";
@@ -73,6 +75,16 @@ export default async function TransactionsPage({
                       : ""}
                   {formatMoney(t.amount)}
                 </b>
+                <form action={deleteTransaction} className="transaction-delete">
+                  <input type="hidden" name="id" value={t.id} />
+                  <button
+                    type="submit"
+                    aria-label={`Excluir ${t.description}`}
+                    title="Excluir transação"
+                  >
+                    <Trash2 />
+                  </button>
+                </form>
               </div>
             ))}
           </div>

@@ -112,6 +112,8 @@ export async function createTransaction(fd: FormData) {
     accountId = String(fd.get("accountId") ?? ""),
     transferAccountId = String(fd.get("transferAccountId") ?? "") || null,
     amount = parseMoney(fd.get("amount")),
+    notes = String(fd.get("notes") ?? "").trim() || null,
+    status = String(fd.get("status") ?? "paid"),
     transactionDate = new Date(
       `${String(fd.get("transactionDate") ?? "")}T12:00:00Z`,
     );
@@ -124,6 +126,7 @@ export async function createTransaction(fd: FormData) {
   if (
     !description ||
     !["income", "expense", "transfer"].includes(type) ||
+    !["pending", "paid"].includes(status) ||
     !(amount > 0) ||
     Number.isNaN(transactionDate.valueOf()) ||
     !accounts.some((a) => a.id === accountId)
@@ -148,10 +151,23 @@ export async function createTransaction(fd: FormData) {
       description,
       amount,
       transactionDate,
+      notes,
+      status: status as never,
     },
   });
   revalidatePath("/");
   revalidatePath("/accounts");
   revalidatePath("/transactions");
   redirect("/transactions?success=Transação adicionada com sucesso.");
+}
+
+export async function deleteTransaction(fd: FormData) {
+  const user = await requireUser();
+  const id = String(fd.get("id") ?? "");
+  if (!id) fail("/transactions", "Transação inválida.");
+  await prisma.transaction.deleteMany({ where: { id, userId: user.id } });
+  revalidatePath("/");
+  revalidatePath("/accounts");
+  revalidatePath("/transactions");
+  redirect("/transactions?success=Transação excluída com sucesso.");
 }
