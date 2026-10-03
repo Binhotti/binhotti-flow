@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { register } from "@/app/actions";
 import { Flash } from "@/components/flash";
 export default async function RegisterPage({
@@ -37,7 +38,9 @@ export default async function RegisterPage({
             required
           />
         </label>
-        <button className="button full">Criar minha conta</button>
+        <button className="button full auth-submit">
+          Criar minha conta <ArrowRight />
+        </button>
       </form>
       <p className="auth-link">
         Já tem conta? <Link href="/login">Entrar</Link>

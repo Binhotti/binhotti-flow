@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { login } from "@/app/actions";
 import { Flash } from "@/components/flash";
 export default async function LoginPage({
@@ -34,7 +35,9 @@ export default async function LoginPage({
             autoComplete="current-password"
           />
         </label>
-        <button className="button full">Entrar</button>
+        <button className="button full auth-submit">
+          Entrar <ArrowRight />
+        </button>
       </form>
       <p className="auth-link">
         Ainda não tem conta? <Link href="/register">Criar gratuitamente</Link>
