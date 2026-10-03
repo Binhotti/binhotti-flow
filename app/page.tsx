@@ -4,10 +4,12 @@ import {
   ArrowRightLeft,
   ArrowUpRight,
   Landmark,
+  PiggyBank,
   ReceiptText,
   Sparkles,
   TrendingDown,
   TrendingUp,
+  Target,
   WalletCards,
 } from "lucide-react";
 import { CategoryChart, CashFlowChart } from "@/components/dashboard-charts";
@@ -28,29 +30,38 @@ export default async function Dashboard() {
   const sixMonthsAgo = new Date(
     Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 5, 1),
   );
-  const [accounts, recentTransactions, chartTransactions] = await Promise.all([
-    prisma.account.findMany({
-      where: { userId: user.id, isActive: true },
-      include: {
-        outgoingTransactions: { where: { status: "paid" } },
-        incomingTransfers: { where: { status: "paid" } },
-      },
-    }),
-    prisma.transaction.findMany({
-      where: { userId: user.id },
-      include: { account: true, transferAccount: true },
-      orderBy: [{ transactionDate: "desc" }, { createdAt: "desc" }],
-      take: 6,
-    }),
-    prisma.transaction.findMany({
-      where: {
-        userId: user.id,
-        status: "paid",
-        transactionDate: { gte: sixMonthsAgo },
-      },
-      orderBy: { transactionDate: "asc" },
-    }),
-  ]);
+  const [accounts, recentTransactions, chartTransactions, investments, goals] =
+    await Promise.all([
+      prisma.account.findMany({
+        where: { userId: user.id, isActive: true },
+        include: {
+          outgoingTransactions: { where: { status: "paid" } },
+          incomingTransfers: { where: { status: "paid" } },
+        },
+      }),
+      prisma.transaction.findMany({
+        where: { userId: user.id },
+        include: { account: true, transferAccount: true },
+        orderBy: [{ transactionDate: "desc" }, { createdAt: "desc" }],
+        take: 6,
+      }),
+      prisma.transaction.findMany({
+        where: {
+          userId: user.id,
+          status: "paid",
+          transactionDate: { gte: sixMonthsAgo },
+        },
+        orderBy: { transactionDate: "asc" },
+      }),
+      prisma.investment.findMany({
+        where: { userId: user.id },
+        select: { amount: true },
+      }),
+      prisma.goal.findMany({
+        where: { userId: user.id },
+        select: { currentAmount: true },
+      }),
+    ]);
 
   const accountBalance = (account: (typeof accounts)[number]) =>
     Number(account.initialBalance) +
@@ -84,6 +95,14 @@ export default async function Dashboard() {
     .reduce((sum, transaction) => sum + Number(transaction.amount), 0);
   const savingsRate =
     income > 0 ? Math.round(((income - expenses) / income) * 100) : 0;
+  const invested = investments.reduce(
+    (sum, item) => sum + Number(item.amount),
+    0,
+  );
+  const goalsSaved = goals.reduce(
+    (sum, goal) => sum + Number(goal.currentAmount),
+    0,
+  );
 
   const monthlyData = Array.from({ length: 6 }, (_, index) => {
     const date = new Date(
@@ -161,6 +180,27 @@ export default async function Dashboard() {
             <strong>{formatMoney(expenses)}</strong>
           </div>
         </article>
+        <Link
+          href="/investments"
+          className="bento-card metric-card metric-link"
+        >
+          <span className="metric-icon investment-bg">
+            <PiggyBank />
+          </span>
+          <div>
+            <small>Dinheiro investido</small>
+            <strong>{formatMoney(invested)}</strong>
+          </div>
+        </Link>
+        <Link href="/goals" className="bento-card metric-card metric-link">
+          <span className="metric-icon goal-bg">
+            <Target />
+          </span>
+          <div>
+            <small>Guardado em metas</small>
+            <strong>{formatMoney(goalsSaved)}</strong>
+          </div>
+        </Link>
         <article className="bento-card chart-card bento-span-2">
           <div className="card-head">
             <div>

@@ -171,3 +171,94 @@ export async function deleteTransaction(fd: FormData) {
   revalidatePath("/transactions");
   redirect("/transactions?success=Transação excluída com sucesso.");
 }
+
+export async function createInvestment(fd: FormData) {
+  const user = await requireUser();
+  const name = String(fd.get("name") ?? "").trim();
+  const institution = String(fd.get("institution") ?? "").trim() || null;
+  const amount = parseMoney(fd.get("amount"));
+  const annualRateText = String(fd.get("annualRate") ?? "").replace(",", ".");
+  const annualRate = annualRateText ? Number(annualRateText) : null;
+  const maturityText = String(fd.get("maturityDate") ?? "");
+  const maturityDate = maturityText
+    ? new Date(`${maturityText}T12:00:00Z`)
+    : null;
+  const notes = String(fd.get("notes") ?? "").trim() || null;
+  if (
+    !name ||
+    !(amount >= 0) ||
+    (annualRate !== null && !Number.isFinite(annualRate))
+  )
+    fail("/investments/new", "Preencha os dados da caixinha corretamente.");
+  await prisma.investment.create({
+    data: {
+      userId: user.id,
+      name,
+      institution,
+      amount,
+      annualRate,
+      maturityDate,
+      notes,
+    },
+  });
+  revalidatePath("/");
+  revalidatePath("/investments");
+  redirect("/investments?success=Caixinha adicionada com sucesso.");
+}
+
+export async function deleteInvestment(fd: FormData) {
+  const user = await requireUser();
+  await prisma.investment.deleteMany({
+    where: { id: String(fd.get("id") ?? ""), userId: user.id },
+  });
+  revalidatePath("/");
+  revalidatePath("/investments");
+}
+
+export async function createGoal(fd: FormData) {
+  const user = await requireUser();
+  const name = String(fd.get("name") ?? "").trim();
+  const targetAmount = parseMoney(fd.get("targetAmount"));
+  const currentAmount = parseMoney(fd.get("currentAmount"));
+  const deadlineText = String(fd.get("deadline") ?? "");
+  const deadline = deadlineText ? new Date(`${deadlineText}T12:00:00Z`) : null;
+  const color = String(fd.get("color") ?? "#b8ff45");
+  if (!name || !(targetAmount > 0) || !(currentAmount >= 0))
+    fail("/goals/new", "Preencha os dados da meta corretamente.");
+  await prisma.goal.create({
+    data: {
+      userId: user.id,
+      name,
+      targetAmount,
+      currentAmount,
+      deadline,
+      color,
+    },
+  });
+  revalidatePath("/");
+  revalidatePath("/goals");
+  redirect("/goals?success=Meta criada com sucesso.");
+}
+
+export async function addGoalAmount(fd: FormData) {
+  const user = await requireUser();
+  const id = String(fd.get("id") ?? "");
+  const amount = parseMoney(fd.get("amount"));
+  const goal = await prisma.goal.findFirst({ where: { id, userId: user.id } });
+  if (!goal || !(amount > 0)) fail("/goals", "Informe um valor válido.");
+  await prisma.goal.update({
+    where: { id },
+    data: { currentAmount: { increment: amount } },
+  });
+  revalidatePath("/");
+  revalidatePath("/goals");
+}
+
+export async function deleteGoal(fd: FormData) {
+  const user = await requireUser();
+  await prisma.goal.deleteMany({
+    where: { id: String(fd.get("id") ?? ""), userId: user.id },
+  });
+  revalidatePath("/");
+  revalidatePath("/goals");
+}

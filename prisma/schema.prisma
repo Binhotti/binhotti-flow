@@ -1,10 +1,12 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
+
 enum AccountType {
   checking
   savings
@@ -12,60 +14,100 @@ enum AccountType {
   investment
   other
 }
+
 enum TransactionType {
   income
   expense
   transfer
 }
+
 enum TransactionStatus {
   pending
   paid
   cancelled
 }
+
 model User {
-  id String @id @default(cuid())
-  name String
-  email String @unique
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
   passwordHash String
-  currency String @default("BRL")
-  timezone String @default("America/Sao_Paulo")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  accounts Account[]
+  currency     String        @default("BRL")
+  timezone     String        @default("America/Sao_Paulo")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  accounts     Account[]
   transactions Transaction[]
+  investments  Investment[]
+  goals        Goal[]
 }
+
+model Investment {
+  id           String    @id @default(cuid())
+  userId       String
+  name         String
+  institution  String?
+  amount       Decimal   @db.Decimal(15, 2)
+  annualRate   Decimal?  @db.Decimal(7, 3)
+  maturityDate DateTime?
+  notes        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Goal {
+  id            String    @id @default(cuid())
+  userId        String
+  name          String
+  targetAmount  Decimal   @db.Decimal(15, 2)
+  currentAmount Decimal   @default(0) @db.Decimal(15, 2)
+  deadline      DateTime?
+  color         String    @default("#b8ff45")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
 model Account {
-  id String @id @default(cuid())
-  userId String
-  name String
-  institution String?
-  type AccountType @default(checking)
-  initialBalance Decimal @default(0) @db.Decimal(15,2)
-  isActive Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  id                   String        @id @default(cuid())
+  userId               String
+  name                 String
+  institution          String?
+  type                 AccountType   @default(checking)
+  initialBalance       Decimal       @default(0) @db.Decimal(15, 2)
+  isActive             Boolean       @default(true)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  user                 User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   outgoingTransactions Transaction[] @relation("OriginAccount")
-  incomingTransfers Transaction[] @relation("DestinationAccount")
-  @@index([userId,isActive])
+  incomingTransfers    Transaction[] @relation("DestinationAccount")
+
+  @@index([userId, isActive])
 }
+
 model Transaction {
-  id String @id @default(cuid())
-  userId String
-  accountId String
+  id                String            @id @default(cuid())
+  userId            String
+  accountId         String
   transferAccountId String?
-  type TransactionType
-  description String
-  amount Decimal @db.Decimal(15,2)
-  transactionDate DateTime
-  status TransactionStatus @default(paid)
-  notes String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
-  account Account @relation("OriginAccount",fields:[accountId],references:[id])
-  transferAccount Account? @relation("DestinationAccount",fields:[transferAccountId],references:[id])
-  @@index([userId,transactionDate])
+  type              TransactionType
+  description       String
+  amount            Decimal           @db.Decimal(15, 2)
+  transactionDate   DateTime
+  status            TransactionStatus @default(paid)
+  notes             String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account           Account           @relation("OriginAccount", fields: [accountId], references: [id])
+  transferAccount   Account?          @relation("DestinationAccount", fields: [transferAccountId], references: [id])
+
+  @@index([userId, transactionDate])
   @@index([accountId])
   @@index([transferAccountId])
 }

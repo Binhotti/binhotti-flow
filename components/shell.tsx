@@ -8,9 +8,10 @@ import {
   ChevronLeft,
   LayoutDashboard,
   LogOut,
-  Menu,
+  PiggyBank,
   Plus,
   ReceiptText,
+  Target,
   WalletCards,
 } from "lucide-react";
 import { logout } from "@/app/actions";
@@ -19,6 +20,8 @@ const navigation = [
   { href: "/", label: "Início", icon: LayoutDashboard },
   { href: "/accounts", label: "Contas", icon: WalletCards },
   { href: "/transactions", label: "Transações", icon: ReceiptText },
+  { href: "/investments", label: "Caixinhas", icon: PiggyBank },
+  { href: "/goals", label: "Metas", icon: Target },
 ];
 
 export function Shell({
@@ -66,7 +69,7 @@ export function Shell({
             onClick={toggleSidebar}
             aria-label={collapsed ? "Abrir menu" : "Recolher menu"}
           >
-            {collapsed ? <Menu /> : <ChevronLeft />}
+            <ChevronLeft />
           </button>
         </div>
         <nav aria-label="Navegação principal">
@@ -121,13 +124,6 @@ export function Shell({
             </Link>
           );
         })}
-        <Link
-          href="/transactions/new"
-          className="mobile-add"
-          aria-label="Nova transação"
-        >
-          <Plus />
-        </Link>
       </nav>
     </div>
   );

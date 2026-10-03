@@ -147,9 +147,14 @@ select {
   color: #090b0c;
   font-weight: 800;
   cursor: pointer;
+  min-height: 46px;
+  line-height: 1;
+  white-space: nowrap;
 }
 .button svg {
   width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
 }
 .hero-balance {
   padding: 32px;
@@ -725,6 +730,7 @@ select {
   padding: 24px 18px;
   z-index: 20;
   transition: width 0.25s ease;
+  overflow: visible;
 }
 .sidebar-header {
   display: flex;
@@ -733,6 +739,10 @@ select {
   gap: 10px;
 }
 .sidebar-toggle {
+  position: absolute;
+  top: 28px;
+  right: -17px;
+  z-index: 2;
   width: 34px;
   height: 34px;
   flex: 0 0 34px;
@@ -781,13 +791,15 @@ select {
   width: 0;
   opacity: 0;
 }
-.sidebar-collapsed .sidebar-header {
-  flex-direction: column;
-}
 .sidebar-collapsed .sidebar nav a,
 .sidebar-collapsed .logout {
   justify-content: center;
   padding-inline: 0;
+  width: 52px;
+  margin-inline: auto;
+}
+.sidebar-collapsed .sidebar-toggle svg {
+  transform: rotate(180deg);
 }
 .sidebar-collapsed .sidebar nav a.active {
   box-shadow: inset 0 -3px var(--accent);
@@ -888,6 +900,23 @@ select {
 .negative-bg {
   color: var(--danger);
   background: rgba(255, 119, 119, 0.09);
+}
+.investment-bg {
+  color: #58d6c7;
+  background: rgba(88, 214, 199, 0.1);
+}
+.goal-bg {
+  color: #f4c95d;
+  background: rgba(244, 201, 93, 0.1);
+}
+.metric-link {
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease;
+}
+.metric-link:hover {
+  transform: translateY(-2px);
+  border-color: #3a4348;
 }
 .chart-card {
   min-height: 360px;
@@ -1140,7 +1169,7 @@ select {
     bottom: max(10px, env(safe-area-inset-bottom));
     height: 68px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr) 58px;
+    grid-template-columns: repeat(5, 1fr);
     align-items: center;
     padding: 7px 8px;
     border: 1px solid rgba(255, 255, 255, 0.09);
@@ -1164,19 +1193,6 @@ select {
   }
   .mobile-navigation a.active {
     color: var(--accent);
-  }
-  .mobile-navigation .mobile-add {
-    width: 50px;
-    height: 50px;
-    margin-left: auto;
-    border-radius: 17px;
-    background: var(--accent);
-    color: #0b0d0e;
-    transform: translateY(-10px);
-    box-shadow: 0 8px 28px rgba(184, 255, 69, 0.24);
-  }
-  .mobile-navigation .mobile-add svg {
-    width: 23px;
   }
   .topbar {
     min-height: 118px;
@@ -1268,6 +1284,219 @@ select {
   .form-card {
     padding: 18px;
     border-radius: 18px;
+  }
+}
+
+/* Investments and goals */
+.summary-strip {
+  min-height: 138px;
+  margin-bottom: 16px;
+  padding: 26px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(184, 255, 69, 0.22);
+  border-radius: 24px;
+  background: linear-gradient(
+    120deg,
+    rgba(184, 255, 69, 0.12),
+    rgba(184, 255, 69, 0.02)
+  );
+}
+.summary-strip span {
+  color: var(--muted);
+  font-size: 13px;
+}
+.summary-strip strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 34px;
+}
+.summary-strip .summary-icon {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  background: rgba(184, 255, 69, 0.1);
+  color: var(--accent);
+}
+.summary-icon svg {
+  width: 28px;
+  height: 28px;
+}
+.investments-grid,
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.investment-card,
+.goal-card {
+  position: relative;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--panel);
+}
+.investment-card > small {
+  display: block;
+  margin-top: 20px;
+  color: var(--muted);
+}
+.investment-card h2,
+.goal-card h2 {
+  margin: 5px 0 0;
+  font-size: 19px;
+}
+.investment-card > p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.investment-date {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.investment-date svg {
+  width: 14px;
+}
+.card-delete {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.card-delete button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+.card-delete button:hover {
+  color: var(--danger);
+}
+.card-delete svg {
+  width: 14px;
+}
+.goal-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.goal-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+}
+.goal-icon svg {
+  width: 20px;
+}
+.goal-percent {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--accent);
+}
+.goal-card > p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.goal-card > p svg {
+  width: 14px;
+}
+.goal-values {
+  margin-top: 24px;
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+.goal-values strong {
+  font-size: 22px;
+}
+.goal-values span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.goal-progress {
+  height: 8px;
+  margin: 12px 0 18px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #252b2f;
+}
+.goal-progress i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+.goal-add {
+  display: grid;
+  grid-template-columns: 1fr 40px;
+  gap: 8px;
+}
+.goal-add input {
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #0b0d0e;
+  color: var(--text);
+}
+.goal-add button {
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #0b0d0e;
+  cursor: pointer;
+}
+.goal-add svg {
+  width: 17px;
+}
+
+@media (max-width: 1050px) {
+  .investments-grid,
+  .goals-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .investments-grid,
+  .goals-grid {
+    grid-template-columns: 1fr;
+  }
+  .summary-strip {
+    min-height: 120px;
+    padding: 22px;
+    border-radius: 20px;
+  }
+  .summary-strip strong {
+    font-size: 28px;
+  }
+  .summary-strip .summary-icon {
+    width: 54px;
+    height: 54px;
+  }
+  .mobile-navigation a {
+    min-width: 0;
+  }
+  .mobile-navigation a span {
+    max-width: 58px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
