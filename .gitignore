@@ -1,4 +1,9 @@
 .env
+.env.local
+.next/
+node_modules/
+*.log
+.npm-cache/
 /vendor/
 storage/logs/*.log
 .DS_Store
