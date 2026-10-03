@@ -1,56 +1,22 @@
-<!-- # Binhotti Flow
+# Binhotti Flow
 
-Base inicial de um sistema de gestão financeira pessoal em PHP + MySQL.
+Assistente financeiro pessoal feito com Next.js, Node.js, TypeScript, PostgreSQL e Prisma.
 
-## Requisitos
+## Funcionalidades
 
-- PHP 8.1+
-- MySQL 8+
-- Apache (XAMPP/Laragon) ou servidor embutido do PHP
-- Extensão PDO MySQL habilitada
+- Cadastro, login e sessão segura por cookie HTTP-only
+- Contas com saldo inicial, edição e ativação/desativação
+- Receitas, despesas e transferências entre contas
+- Dashboard com saldo consolidado e resumo mensal
+- Interface responsiva pronta para Vercel
 
-## Como começar
+## Desenvolvimento local
 
-1. Copie `.env.example` para `.env`.
-2. Crie um banco chamado `binhotti_flow`.
-3. Importe `database/schema.sql`.
-4. Ajuste as credenciais do banco em `.env`.
-5. Aponte o servidor web para a pasta `public/`.
+1. Execute `pnpm install`.
+2. Copie `.env.example` para `.env` e preencha as variáveis.
+3. Execute `pnpm db:push`.
+4. Execute `pnpm dev`.
 
-Servidor embutido do PHP:
+## Deploy
 
-```bash
-php -S localhost:8000 -t public
-```
-
-Depois acesse:
-
-```text
-http://localhost:8000
-```
-
-## Estrutura
-
-- `app/Controllers` — recebe as requisições e coordena regras.
-- `app/Models` — acesso e representação dos dados.
-- `app/Services` — regras de negócio financeiras.
-- `app/Middleware` — autenticação e proteção de rotas.
-- `app/Views` — HTML/PHP das telas.
-- `config` — configurações.
-- `database` — schema e futuras migrations/seeds.
-- `public` — único diretório público.
-- `routes` — definição de rotas.
-- `storage` — logs e arquivos internos.
-
-## Próximos passos sugeridos
-
-1. Cadastro.
-2. Login/logout.
-3. Middleware de autenticação.
-4. Cadastro de contas.
-5. Categorias.
-6. Transações.
-7. Dashboard.
-8. Cartões e parcelas.
-9. Orçamentos mensais.
-10. Metas e projeções. -->
+Conecte o repositório à Vercel, adicione PostgreSQL pelo Marketplace e configure `DATABASE_URL` e `AUTH_SECRET`.
