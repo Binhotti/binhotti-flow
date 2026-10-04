@@ -1,18 +1,14 @@
-import {
-  BarChart3,
-  ChartNoAxesCombined,
-  PiggyBank,
-  ShieldCheck,
-} from "lucide-react";
+import Image from "next/image";
+import { BarChart3, ChartPie, LockKeyhole, ShieldCheck, TrendingUp } from "lucide-react";
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <main className="auth-shell">
+    <main className="auth-shell auth-reference">
       <section className="auth-aside">
-        <div className="brand">
+        <div className="brand auth-brand">
           <span className="brand-mark">
             <BarChart3 />
           </span>
@@ -20,40 +16,40 @@ export default function AuthLayout({
             Binhotti <b>Flow</b>
           </span>
         </div>
+        <Image className="auth-phone-art" src="/images/finance-phone-hero.png" alt="Aplicativo Binhotti Flow mostrando um panorama financeiro" width={760} height={900} priority />
         <div className="auth-presentation">
-          <p className="eyebrow">FINANÇAS MAIS LEVES</p>
+          <p className="eyebrow">CONTROLE SEM COMPLICAÇÃO</p>
           <h1>
-            Clareza para cuidar do que <em>importa.</em>
+            Seu dinheiro.<em>Sob controle.</em>
           </h1>
           <p>
-            Contas, investimentos e metas organizados em uma experiência simples
-            e segura.
+            Organize contas, acompanhe movimentações e enxergue com clareza para onde seu dinheiro está indo.
           </p>
           <div className="auth-features">
             <div>
-              <ChartNoAxesCombined />
+              <TrendingUp />
               <span>
-                <strong>Visão completa</strong>
-                <small>Acompanhe seu dinheiro em tempo real</small>
+                <strong>Acompanhe seus gastos</strong>
+                <small>Veja tudo em tempo real</small>
               </span>
             </div>
             <div>
-              <PiggyBank />
+              <ChartPie />
               <span>
-                <strong>Planeje o futuro</strong>
-                <small>Caixinhas e metas no mesmo lugar</small>
+                <strong>Organize suas contas</strong>
+                <small>Tudo no mesmo lugar</small>
               </span>
             </div>
             <div>
-              <ShieldCheck />
+              <LockKeyhole />
               <span>
-                <strong>Seus dados protegidos</strong>
-                <small>Acesso pessoal e seguro</small>
+                <strong>Planeje seu futuro</strong>
+                <small>Mais controle, menos preocupação</small>
               </span>
             </div>
           </div>
         </div>
-        <small>Organize hoje. Conquiste amanhã.</small>
+        <small className="auth-footer-copy">Planeje hoje. Respire amanhã.</small>
       </section>
       <section className="auth-panel">
         <div className="auth-mobile-brand">
@@ -64,10 +60,10 @@ export default function AuthLayout({
             Binhotti <b>Flow</b>
           </span>
         </div>
-        {children}
         <p className="auth-security">
-          <ShieldCheck /> Ambiente protegido
+          <ShieldCheck /> Seus dados estão seguros
         </p>
+        {children}
       </section>
     </main>
   );

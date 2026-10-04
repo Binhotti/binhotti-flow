@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowDownLeft, ArrowRightLeft, ArrowUpRight } from "lucide-react";
 import { createTransaction } from "@/app/actions";
+import { MoneyInput } from "@/components/money-input";
 export function TransactionForm({
   accounts,
 }: {
@@ -70,12 +71,7 @@ export function TransactionForm({
         )}
         <label>
           Valor
-          <input
-            name="amount"
-            inputMode="decimal"
-            placeholder="0,00"
-            required
-          />
+          <MoneyInput name="amount" required />
         </label>
         <label>
           Data
