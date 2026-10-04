@@ -2,6 +2,8 @@ import Link from "next/link";
 import { createGoal } from "@/app/actions";
 import { Flash } from "@/components/flash";
 import { Shell } from "@/components/shell";
+import { MoneyInput } from "@/components/money-input";
+import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 
 export default async function NewGoal({
@@ -9,8 +11,13 @@ export default async function NewGoal({
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
-  await requireUser();
+  const user = await requireUser();
   const { error } = await searchParams;
+  const investments = await prisma.investment.findMany({
+    where: { userId: user.id },
+    orderBy: { name: "asc" },
+    select: { id: true, name: true, amount: true },
+  });
   return (
     <Shell
       title="Nova meta"
@@ -30,21 +37,27 @@ export default async function NewGoal({
           <div className="form-grid">
             <label>
               Valor do objetivo
-              <input
-                name="targetAmount"
-                inputMode="decimal"
-                placeholder="0,00"
-                required
-              />
+              <MoneyInput name="targetAmount" required />
             </label>
             <label>
               Valor já guardado
-              <input
-                name="currentAmount"
-                inputMode="decimal"
-                defaultValue="0,00"
-                required
-              />
+              <MoneyInput name="currentAmount" defaultValue={0} required />
+            </label>
+            <label className="wide">
+              Vincular a uma caixinha{" "}
+              <span>Opcional — o progresso usará o saldo dela</span>
+              <select name="investmentId" defaultValue="">
+                <option value="">Não vincular</option>
+                {investments.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name} —{" "}
+                    {Number(item.amount).toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })}
+                  </option>
+                ))}
+              </select>
             </label>
             <label>
               Prazo <span>Opcional</span>

@@ -59,7 +59,10 @@ export default async function Dashboard() {
       }),
       prisma.goal.findMany({
         where: { userId: user.id },
-        select: { currentAmount: true },
+        select: {
+          currentAmount: true,
+          investment: { select: { amount: true } },
+        },
       }),
     ]);
 
@@ -100,7 +103,7 @@ export default async function Dashboard() {
     0,
   );
   const goalsSaved = goals.reduce(
-    (sum, goal) => sum + Number(goal.currentAmount),
+    (sum, goal) => sum + Number(goal.investment?.amount ?? goal.currentAmount),
     0,
   );
 

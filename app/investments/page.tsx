@@ -1,8 +1,16 @@
 import Link from "next/link";
-import { CalendarDays, PiggyBank, Trash2, TrendingUp } from "lucide-react";
-import { deleteInvestment } from "@/app/actions";
+import {
+  CalendarDays,
+  Pencil,
+  PiggyBank,
+  Plus,
+  TrendingUp,
+} from "lucide-react";
+import { addInvestmentAmount, deleteInvestment } from "@/app/actions";
+import { ConfirmButton } from "@/components/confirm-button";
 import { Flash } from "@/components/flash";
 import { Shell } from "@/components/shell";
+import { MoneyInput } from "@/components/money-input";
 import { requireUser } from "@/lib/auth";
 import { formatDate, formatMoney } from "@/lib/money";
 import { prisma } from "@/lib/prisma";
@@ -60,12 +68,28 @@ export default async function InvestmentsPage({
               </p>
             )}
             {item.notes && <p>{item.notes}</p>}
-            <form action={deleteInvestment} className="card-delete">
+            <form action={addInvestmentAmount} className="investment-add">
               <input type="hidden" name="id" value={item.id} />
-              <button type="submit">
-                <Trash2 /> Excluir
+              <MoneyInput
+                name="amount"
+                placeholder="Adicionar valor"
+                required
+              />
+              <button type="submit" aria-label="Adicionar valor">
+                <Plus />
               </button>
             </form>
+            <div className="investment-actions">
+              <Link href={`/investments/${item.id}/edit`}>
+                <Pencil /> Editar
+              </Link>
+              <form action={deleteInvestment} className="card-delete">
+                <input type="hidden" name="id" value={item.id} />
+                <ConfirmButton
+                  message={`Excluir a caixinha “${item.name}”? Metas vinculadas serão mantidas, mas deixarão de usar seu saldo.`}
+                />
+              </form>
+            </div>
           </article>
         ))}
         {!investments.length && (

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Building2, Pencil, Power, WalletCards } from "lucide-react";
-import { toggleAccount } from "@/app/actions";
+import { deleteAccount, toggleAccount } from "@/app/actions";
+import { ConfirmButton } from "@/components/confirm-button";
 import { Flash } from "@/components/flash";
 import { Shell } from "@/components/shell";
 import { requireUser } from "@/lib/auth";
@@ -75,6 +76,12 @@ export default async function AccountsPage({
                   <button>
                     <Power /> {a.isActive ? "Desativar" : "Ativar"}
                   </button>
+                </form>
+                <form action={deleteAccount} className="danger-action">
+                  <input type="hidden" name="id" value={a.id} />
+                  <ConfirmButton
+                    message={`Excluir a conta “${a.name}” e todas as movimentações relacionadas? Esta ação não pode ser desfeita.`}
+                  />
                 </form>
               </div>
             </article>

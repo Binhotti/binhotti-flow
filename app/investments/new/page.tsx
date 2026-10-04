@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createInvestment } from "@/app/actions";
 import { Flash } from "@/components/flash";
 import { Shell } from "@/components/shell";
+import { MoneyInput } from "@/components/money-input";
 import { requireUser } from "@/lib/auth";
 
 export default async function NewInvestment({
@@ -37,12 +38,7 @@ export default async function NewInvestment({
           <div className="form-grid">
             <label>
               Valor investido
-              <input
-                name="amount"
-                inputMode="decimal"
-                placeholder="0,00"
-                required
-              />
+              <MoneyInput name="amount" required />
             </label>
             <label>
               Rendimento anual <span>Opcional</span>

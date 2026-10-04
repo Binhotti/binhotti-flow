@@ -105,6 +105,28 @@ export async function toggleAccount(fd: FormData) {
   revalidatePath("/");
   revalidatePath("/accounts");
 }
+
+export async function deleteAccount(fd: FormData) {
+  const user = await requireUser();
+  const id = String(fd.get("id") ?? "");
+  const account = await prisma.account.findFirst({
+    where: { id, userId: user.id },
+  });
+  if (!account) fail("/accounts", "Conta não encontrada.");
+  await prisma.$transaction([
+    prisma.transaction.deleteMany({
+      where: {
+        userId: user.id,
+        OR: [{ accountId: id }, { transferAccountId: id }],
+      },
+    }),
+    prisma.account.delete({ where: { id } }),
+  ]);
+  revalidatePath("/");
+  revalidatePath("/accounts");
+  revalidatePath("/transactions");
+  redirect("/accounts?success=Conta e movimentações relacionadas excluídas.");
+}
 export async function createTransaction(fd: FormData) {
   const user = await requireUser(),
     type = String(fd.get("type") ?? ""),
@@ -215,15 +237,70 @@ export async function deleteInvestment(fd: FormData) {
   revalidatePath("/investments");
 }
 
+export async function updateInvestment(fd: FormData) {
+  const user = await requireUser();
+  const id = String(fd.get("id") ?? "");
+  const name = String(fd.get("name") ?? "").trim();
+  const institution = String(fd.get("institution") ?? "").trim() || null;
+  const amount = parseMoney(fd.get("amount"));
+  const annualRateText = String(fd.get("annualRate") ?? "").replace(",", ".");
+  const annualRate = annualRateText ? Number(annualRateText) : null;
+  const maturityText = String(fd.get("maturityDate") ?? "");
+  const maturityDate = maturityText
+    ? new Date(`${maturityText}T12:00:00Z`)
+    : null;
+  const notes = String(fd.get("notes") ?? "").trim() || null;
+  if (
+    !id ||
+    !name ||
+    !(amount >= 0) ||
+    (annualRate !== null && !Number.isFinite(annualRate))
+  )
+    fail(`/investments/${id}/edit`, "Preencha os dados corretamente.");
+  await prisma.investment.updateMany({
+    where: { id, userId: user.id },
+    data: { name, institution, amount, annualRate, maturityDate, notes },
+  });
+  revalidatePath("/");
+  revalidatePath("/investments");
+  redirect("/investments?success=Caixinha atualizada com sucesso.");
+}
+
+export async function addInvestmentAmount(fd: FormData) {
+  const user = await requireUser();
+  const id = String(fd.get("id") ?? "");
+  const amount = parseMoney(fd.get("amount"));
+  if (!(amount > 0))
+    fail("/investments", "Informe um valor válido para o aporte.");
+  await prisma.investment.updateMany({
+    where: { id, userId: user.id },
+    data: { amount: { increment: amount } },
+  });
+  revalidatePath("/");
+  revalidatePath("/investments");
+  revalidatePath("/goals");
+}
+
 export async function createGoal(fd: FormData) {
   const user = await requireUser();
   const name = String(fd.get("name") ?? "").trim();
   const targetAmount = parseMoney(fd.get("targetAmount"));
   const currentAmount = parseMoney(fd.get("currentAmount"));
+  const investmentId = String(fd.get("investmentId") ?? "") || null;
   const deadlineText = String(fd.get("deadline") ?? "");
   const deadline = deadlineText ? new Date(`${deadlineText}T12:00:00Z`) : null;
   const color = String(fd.get("color") ?? "#b8ff45");
-  if (!name || !(targetAmount > 0) || !(currentAmount >= 0))
+  const investment = investmentId
+    ? await prisma.investment.findFirst({
+        where: { id: investmentId, userId: user.id },
+      })
+    : null;
+  if (
+    !name ||
+    !(targetAmount > 0) ||
+    !(currentAmount >= 0) ||
+    (investmentId && !investment)
+  )
     fail("/goals/new", "Preencha os dados da meta corretamente.");
   await prisma.goal.create({
     data: {
@@ -231,6 +308,7 @@ export async function createGoal(fd: FormData) {
       name,
       targetAmount,
       currentAmount,
+      investmentId,
       deadline,
       color,
     },
@@ -246,10 +324,16 @@ export async function addGoalAmount(fd: FormData) {
   const amount = parseMoney(fd.get("amount"));
   const goal = await prisma.goal.findFirst({ where: { id, userId: user.id } });
   if (!goal || !(amount > 0)) fail("/goals", "Informe um valor válido.");
-  await prisma.goal.update({
-    where: { id },
-    data: { currentAmount: { increment: amount } },
-  });
+  if (goal.investmentId)
+    await prisma.investment.update({
+      where: { id: goal.investmentId },
+      data: { amount: { increment: amount } },
+    });
+  else
+    await prisma.goal.update({
+      where: { id },
+      data: { currentAmount: { increment: amount } },
+    });
   revalidatePath("/");
   revalidatePath("/goals");
 }

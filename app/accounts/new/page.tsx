@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createAccount } from "@/app/actions";
 import { Flash } from "@/components/flash";
 import { Shell } from "@/components/shell";
+import { MoneyInput } from "@/components/money-input";
 import { requireUser } from "@/lib/auth";
 export default async function NewAccount({
   searchParams,
@@ -49,12 +50,7 @@ export default async function NewAccount({
             </label>
             <label>
               Saldo atual
-              <input
-                name="initialBalance"
-                inputMode="decimal"
-                defaultValue="0,00"
-                required
-              />
+              <MoneyInput name="initialBalance" defaultValue={0} required />
             </label>
           </div>
           <div className="form-actions">
