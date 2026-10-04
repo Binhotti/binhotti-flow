@@ -48,6 +48,9 @@ export default async function NewGoal({
               <span>Opcional — o progresso usará o saldo dela</span>
               <select name="investmentId" defaultValue="">
                 <option value="">Não vincular</option>
+                {investments.length > 0 && (
+                  <option value="all">Todas as caixinhas</option>
+                )}
                 {investments.map((item) => (
                   <option key={item.id} value={item.id}>
                     {item.name} —{" "}

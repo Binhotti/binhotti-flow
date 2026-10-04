@@ -21,6 +21,11 @@ export default async function GoalsPage({
     include: { investment: true },
     orderBy: { createdAt: "desc" },
   });
+  const allInvestments = await prisma.investment.aggregate({
+    where: { userId: user.id },
+    _sum: { amount: true },
+  });
+  const allInvestmentsAmount = Number(allInvestments._sum.amount ?? 0);
   return (
     <Shell
       title="Metas"
@@ -30,7 +35,9 @@ export default async function GoalsPage({
       <Flash {...params} />
       <div className="goals-grid">
         {goals.map((goal) => {
-          const current = goal.investment
+          const current = goal.allInvestments
+              ? allInvestmentsAmount
+              : goal.investment
               ? Number(goal.investment.amount)
               : Number(goal.currentAmount),
             target = Number(goal.targetAmount),
@@ -52,6 +59,11 @@ export default async function GoalsPage({
                   <PiggyBank /> Vinculada a {goal.investment.name}
                 </p>
               )}
+              {goal.allInvestments && (
+                <p className="goal-linked">
+                  <PiggyBank /> Vinculada a todas as caixinhas
+                </p>
+              )}
               {goal.deadline && (
                 <p>
                   <CalendarDays /> Até {formatDate(goal.deadline)}
@@ -64,17 +76,23 @@ export default async function GoalsPage({
               <div className="goal-progress">
                 <i style={{ width: `${progress}%`, background: goal.color }} />
               </div>
-              <form action={addGoalAmount} className="goal-add">
-                <input type="hidden" name="id" value={goal.id} />
-                <MoneyInput
-                  name="amount"
-                  placeholder="Adicionar valor"
-                  required
-                />
-                <button type="submit" aria-label="Adicionar valor">
-                  <Plus />
-                </button>
-              </form>
+              {goal.allInvestments ? (
+                <p className="goal-all-hint">
+                  O progresso é atualizado pelas suas caixinhas.
+                </p>
+              ) : (
+                <form action={addGoalAmount} className="goal-add">
+                  <input type="hidden" name="id" value={goal.id} />
+                  <MoneyInput
+                    name="amount"
+                    placeholder="Adicionar valor"
+                    required
+                  />
+                  <button type="submit" aria-label="Adicionar valor">
+                    <Plus />
+                  </button>
+                </form>
+              )}
               <form action={deleteGoal} className="card-delete">
                 <input type="hidden" name="id" value={goal.id} />
                 <ConfirmButton

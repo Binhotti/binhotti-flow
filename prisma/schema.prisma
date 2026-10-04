@@ -72,6 +72,7 @@ model Goal {
   user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   investmentId  String?
   investment    Investment? @relation(fields: [investmentId], references: [id], onDelete: SetNull)
+  allInvestments Boolean     @default(false)
 
   @@index([userId])
   @@index([investmentId])

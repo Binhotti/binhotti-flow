@@ -1190,7 +1190,7 @@ select {
   stroke: var(--accent);
 }
 .chart-expense {
-  stroke: #7c8cff;
+  stroke: #9b28059f;
 }
 .chart-point {
   fill: var(--accent);
@@ -1220,7 +1220,7 @@ select {
   background: var(--accent);
 }
 .expense-dot {
-  background: #7c8cff;
+  background: #db3300;
 }
 .insight-card {
   background: linear-gradient(155deg, #191b29, #11131b);
@@ -1763,6 +1763,16 @@ select {
 .goal-add svg {
   width: 17px;
 }
+.goal-all-hint {
+  min-height: 40px;
+  margin: 0;
+  padding: 11px 12px;
+  border: 1px solid rgba(184, 255, 69, 0.14);
+  border-radius: 10px;
+  background: rgba(184, 255, 69, 0.05);
+  color: var(--muted);
+  font-size: 11px;
+}
 
 @media (max-width: 1050px) {
   .investments-grid,
@@ -1831,7 +1841,7 @@ select {
   width: 680px;
   height: 680px;
   right: -130px;
-  top: 9%;
+  top: 15%;
   border-color: rgba(150, 255, 25, 0.28);
   box-shadow: none;
 }
@@ -1850,8 +1860,8 @@ select {
 .auth-phone-art {
   position: absolute;
   z-index: 1;
-  right: -7%;
-  bottom: -8%;
+  right: -15%;
+  bottom: 15%;
   width: min(72vw, 960px);
   height: auto;
   object-fit: contain;

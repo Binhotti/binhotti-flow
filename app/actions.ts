@@ -286,7 +286,10 @@ export async function createGoal(fd: FormData) {
   const name = String(fd.get("name") ?? "").trim();
   const targetAmount = parseMoney(fd.get("targetAmount"));
   const currentAmount = parseMoney(fd.get("currentAmount"));
-  const investmentId = String(fd.get("investmentId") ?? "") || null;
+  const investmentSelection = String(fd.get("investmentId") ?? "");
+  const allInvestments = investmentSelection === "all";
+  const investmentId =
+    investmentSelection && !allInvestments ? investmentSelection : null;
   const deadlineText = String(fd.get("deadline") ?? "");
   const deadline = deadlineText ? new Date(`${deadlineText}T12:00:00Z`) : null;
   const color = String(fd.get("color") ?? "#b8ff45");
@@ -309,6 +312,7 @@ export async function createGoal(fd: FormData) {
       targetAmount,
       currentAmount,
       investmentId,
+      allInvestments,
       deadline,
       color,
     },
@@ -324,6 +328,11 @@ export async function addGoalAmount(fd: FormData) {
   const amount = parseMoney(fd.get("amount"));
   const goal = await prisma.goal.findFirst({ where: { id, userId: user.id } });
   if (!goal || !(amount > 0)) fail("/goals", "Informe um valor válido.");
+  if (goal.allInvestments)
+    fail(
+      "/goals",
+      "Para atualizar esta meta, adicione o valor diretamente em uma das caixinhas.",
+    );
   if (goal.investmentId)
     await prisma.investment.update({
       where: { id: goal.investmentId },
