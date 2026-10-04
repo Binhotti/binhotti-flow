@@ -1,5 +1,112 @@
-"use client"; 
-import Link from "next/link"; 
-import { useState } from "react"; 
-import { ArrowDownLeft, ArrowRightLeft, ArrowUpRight } from "lucide-react"; import { createTransaction } from "@/app/actions"; 
-export function TransactionForm({ accounts }: { accounts: { id: string; name: string }[] }) { const [type, setType] = useState("expense"); return <form action={createTransaction} className="form"><div className="type-selector">{[["income", "Receita", ArrowDownLeft], ["expense", "Despesa", ArrowUpRight], ["transfer", "Transferência", ArrowRightLeft]].map(([value, label, Icon]) => <label key={String(value)}><input type="radio" name="type" value={String(value)} checked={type === value} onChange={() => setType(String(value))} /><span><Icon /> {String(label)}</span></label>)}</div><label>Descrição<input name="description" placeholder="Ex.: Salário, mercado, aluguel" required /></label><div className="form-grid"><label>{type === "transfer" ? "Conta de origem" : "Conta"}<select name="accountId" required defaultValue=""><option value="" disabled>Selecione</option>{accounts.map(a => <option value={a.id} key={a.id}>{a.name}</option>)}</select></label>{type === "transfer" && <label>Conta de destino<select name="transferAccountId" required defaultValue=""><option value="" disabled>Selecione</option>{accounts.map(a => <option value={a.id} key={a.id}>{a.name}</option>)}</select></label>}<label>Valor<input name="amount" inputMode="decimal" placeholder="0,00" required /></label><label>Data<input name="transactionDate" type="date" defaultValue={new Date().toISOString().slice(0, 10)} required /></label></div><div className="form-actions"><Link href="/transactions" className="secondary-button">Cancelar</Link><button className="button">Adicionar transação</button></div></form> }
+"use client";
+import Link from "next/link";
+import { useState } from "react";
+import { ArrowDownLeft, ArrowRightLeft, ArrowUpRight } from "lucide-react";
+import { createTransaction } from "@/app/actions";
+export function TransactionForm({
+  accounts,
+}: {
+  accounts: { id: string; name: string }[];
+}) {
+  const [type, setType] = useState("expense");
+  return (
+    <form action={createTransaction} className="form">
+      <div className="type-selector">
+        {[
+          ["income", "Receita", ArrowDownLeft],
+          ["expense", "Despesa", ArrowUpRight],
+          ["transfer", "Transferência", ArrowRightLeft],
+        ].map(([value, label, Icon]) => (
+          <label key={String(value)}>
+            <input
+              type="radio"
+              name="type"
+              value={String(value)}
+              checked={type === value}
+              onChange={() => setType(String(value))}
+            />
+            <span>
+              <Icon /> {String(label)}
+            </span>
+          </label>
+        ))}
+      </div>
+      <label>
+        Descrição
+        <input
+          name="description"
+          placeholder="Ex.: Salário, mercado, aluguel"
+          required
+        />
+      </label>
+      <div className="form-grid">
+        <label>
+          {type === "transfer" ? "Conta de origem" : "Conta"}
+          <select name="accountId" required defaultValue="">
+            <option value="" disabled>
+              Selecione
+            </option>
+            {accounts.map((a) => (
+              <option value={a.id} key={a.id}>
+                {a.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        {type === "transfer" && (
+          <label>
+            Conta de destino
+            <select name="transferAccountId" required defaultValue="">
+              <option value="" disabled>
+                Selecione
+              </option>
+              {accounts.map((a) => (
+                <option value={a.id} key={a.id}>
+                  {a.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+        <label>
+          Valor
+          <input
+            name="amount"
+            inputMode="decimal"
+            placeholder="0,00"
+            required
+          />
+        </label>
+        <label>
+          Data
+          <input
+            name="transactionDate"
+            type="date"
+            defaultValue={new Date().toISOString().slice(0, 10)}
+            required
+          />
+        </label>
+        <label>
+          Situação
+          <select name="status" defaultValue="paid">
+            <option value="paid">Pago / recebido</option>
+            <option value="pending">Pendente</option>
+          </select>
+        </label>
+      </div>
+      <label>
+        Observações <span>Opcional</span>
+        <input
+          name="notes"
+          placeholder="Adicione um detalhe para lembrar depois"
+        />
+      </label>
+      <div className="form-actions">
+        <Link href="/transactions" className="secondary-button">
+          Cancelar
+        </Link>
+        <button className="button">Adicionar transação</button>
+      </div>
+    </form>
+  );
+}
