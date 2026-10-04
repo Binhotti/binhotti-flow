@@ -39,7 +39,7 @@ export async function login(fd: FormData) {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user || !(await bcrypt.compare(password, user.passwordHash)))
     fail("/login", "E-mail ou senha inválidos.");
-  await createSession(user.id);
+  await createSession(user.id, fd.get("remember") === "on");
   redirect("/");
 }
 export async function logout() {

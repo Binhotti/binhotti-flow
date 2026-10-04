@@ -8,18 +8,18 @@ function secret() {
   if (!v) throw new Error("AUTH_SECRET não configurado.");
   return new TextEncoder().encode(v);
 }
-export async function createSession(userId: string) {
+export async function createSession(userId: string, remember = true) {
   const token = await new SignJWT({ userId })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("30d")
+    .setExpirationTime(remember ? "30d" : "1d")
     .sign(secret());
   (await cookies()).set(COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: 2592000,
+    maxAge: remember ? 2592000 : undefined,
   });
 }
 export async function clearSession() {

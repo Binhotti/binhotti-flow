@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { login } from "@/app/actions";
 import { Flash } from "@/components/flash";
+import { LoginForm } from "@/components/login-form";
 export default async function LoginPage({
   searchParams,
 }: {
@@ -14,31 +13,7 @@ export default async function LoginPage({
       <h2>Entre na sua conta</h2>
       <p>Acesse sua visão financeira completa.</p>
       <Flash error={error} />
-      <form action={login} className="form">
-        <label>
-          E-mail
-          <input
-            name="email"
-            type="email"
-            placeholder="voce@email.com"
-            required
-            autoComplete="email"
-          />
-        </label>
-        <label>
-          Senha
-          <input
-            name="password"
-            type="password"
-            placeholder="••••••••"
-            required
-            autoComplete="current-password"
-          />
-        </label>
-        <button className="button full auth-submit">
-          Entrar <ArrowRight />
-        </button>
-      </form>
+      <LoginForm />
       <p className="auth-link">
         Ainda não tem conta? <Link href="/register">Criar gratuitamente</Link>
       </p>
