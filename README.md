@@ -7,8 +7,12 @@ Assistente financeiro pessoal feito com Next.js, Node.js, TypeScript, PostgreSQL
 - Cadastro, login e sessão segura por cookie HTTP-only
 - Contas com saldo inicial, edição e ativação/desativação
 - Receitas, despesas e transferências entre contas
-- Dashboard com saldo consolidado e resumo mensal
-- Interface responsiva pronta para Vercel
+- Dashboard em grid bento com saldo consolidado, gráficos e resumo mensal
+- Caixinhas para acompanhar dinheiro investido
+- Metas financeiras com prazo, progresso e novos aportes
+- Navegação inferior no celular e sidebar recolhível no computador
+- Interface responsiva para computador, tablet e celular
+- Login e cadastro com design limpo e responsivo
 
 ## Desenvolvimento local
 
