@@ -2631,8 +2631,62 @@ select {
 }
 
 @media (max-width: 680px) {
+  body {
+    min-width: 0;
+    overflow-x: hidden;
+  }
+  .app-shell > main {
+    min-width: 0;
+    padding-bottom: calc(84px + env(safe-area-inset-bottom));
+  }
+  .mobile-navigation {
+    z-index: 1000;
+    left: 8px;
+    right: 8px;
+    bottom: max(8px, env(safe-area-inset-bottom));
+    width: auto;
+    max-width: calc(100vw - 16px);
+    margin: 0 auto;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .mobile-navigation a {
+    min-width: 0;
+    padding: 0 2px;
+  }
+  .dashboard-topbar {
+    align-items: center;
+    gap: 14px;
+  }
+  .dashboard-topbar > div:first-child {
+    min-width: 0;
+    flex: 1;
+  }
+  .dashboard-topbar > div:first-child > span {
+    max-width: 250px;
+  }
+  .topbar-tools {
+    flex: 0 0 48px;
+    gap: 0;
+  }
+  .topbar-action {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 48px;
+    gap: 0;
+    padding: 0;
+    border-radius: 15px;
+  }
+  .topbar-action svg {
+    width: 21px;
+    height: 21px;
+    margin: 0;
+  }
   .dashboard-grid {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
   .dashboard-balance,
   .cashflow-card,
@@ -2642,7 +2696,7 @@ select {
     grid-column: auto;
   }
   .dashboard-balance {
-    min-height: 210px;
+    min-height: 260px;
     padding: 22px;
   }
   .balance-line {
@@ -2650,26 +2704,140 @@ select {
     opacity: 0.45;
   }
   .balance-trend {
-    left: 22px;
-    right: 22px;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
     min-width: 0;
   }
+  .balance-copy strong {
+    font-size: clamp(38px, 12vw, 50px);
+  }
+  .month-summary {
+    display: grid;
+    gap: 22px;
+  }
+  .month-income {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 12px;
+    margin-top: 0;
+  }
+  .month-income .stat-change {
+    margin-left: 0;
+  }
   .stat-card {
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 18px;
   }
   .stat-change {
-    grid-column: 2;
+    grid-column: auto;
+    min-width: 96px;
+  }
+  .stat-change span {
+    font-size: 9px;
   }
   .period-tabs span {
     display: none;
   }
   .cashflow-card {
-    overflow-x: auto;
+    min-height: 345px;
+    padding: 20px 14px;
+    overflow: hidden;
   }
   .cash-bars {
-    min-width: 620px;
+    width: 100%;
+    min-width: 0;
+    height: 250px;
+    grid-template-columns: 43px minmax(0, 1fr);
+    gap: 0 4px;
+  }
+  .bar-plot {
+    min-width: 0;
+  }
+  .bar-groups {
+    gap: 2px;
+  }
+  .bar-pair {
+    gap: 3px;
+    padding-inline: 1px;
+  }
+  .bar-pair i {
+    width: min(12px, 42%);
+  }
+  .bar-scale span,
+  .bar-month > span {
+    font-size: 9px;
+  }
+  .cash-bars .chart-legend {
+    gap: 12px;
+    justify-content: flex-start;
+    padding-left: 12px;
+    font-size: 10px;
+  }
+  .dashboard-card-head {
+    align-items: center;
+  }
+  .dashboard-card-head h2 {
+    font-size: 17px;
+  }
+  .period-tabs {
+    flex: 0 0 auto;
   }
   .health-overview {
     align-items: flex-start;
+  }
+  .health-ring {
+    width: 100px;
+    height: 100px;
+    flex-basis: 100px;
+  }
+  .health-ring::before {
+    width: 76px;
+    height: 76px;
+  }
+  .expenses-card,
+  .recent-card,
+  .health-card {
+    padding: 20px;
+  }
+  .dashboard-transactions > div {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .dashboard-transactions > div > b {
+    grid-column: 2;
+  }
+  .form-card {
+    margin-bottom: 12px;
+  }
+  .form-card .form-actions {
+    padding-bottom: 8px;
+  }
+}
+
+@media (max-width: 390px) {
+  .content:has(.dashboard-grid) {
+    width: calc(100% - 20px);
+  }
+  .dashboard-topbar {
+    padding-inline: 14px;
+  }
+  .dashboard-topbar h1 {
+    font-size: 24px;
+  }
+  .dashboard-icon {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+  }
+  .stat-card strong,
+  .month-income strong {
+    font-size: 18px;
+  }
+  .stat-change {
+    min-width: 88px;
+  }
+  .health-overview {
+    gap: 13px;
   }
 }
