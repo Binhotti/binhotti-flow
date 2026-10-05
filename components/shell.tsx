@@ -112,9 +112,6 @@ export function Shell({
             </h1>
             <span>{description}</span>
           </div>
-          {dashboard && (
-            <blockquote>“Disciplina hoje, liberdade amanhã.”</blockquote>
-          )}
           <div className="topbar-tools">
             {dashboard && (
               <>
