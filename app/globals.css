@@ -2254,6 +2254,9 @@ select {
 .balance-trend b {
   color: var(--accent);
 }
+.balance-trend b.negative {
+  color: #ff535c;
+}
 .balance-trend span {
   color: #9aa49e;
   font-size: 12px;
@@ -2333,6 +2336,14 @@ select {
 .stat-change.negative b {
   background: rgba(255, 69, 79, 0.08);
   color: #ff535c;
+}
+.stat-change b.neutral {
+  background: rgba(139, 148, 155, 0.1);
+  color: #a1aaaf;
+  font-size: 10px;
+}
+.month-income .stat-change {
+  margin-left: auto;
 }
 .cashflow-card {
   grid-column: span 2;
