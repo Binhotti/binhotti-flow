@@ -2003,9 +2003,49 @@ select {
 .admin-avatar { width: 34px; height: 34px; flex: 0 0 34px; display: grid; place-items: center; border-radius: 10px; color: #0a0c0d; background: var(--accent); font-weight: 900; }
 .admin-status { display: inline-flex; padding: 5px 9px; border-radius: 99px; font-size: 9px; font-weight: 800; }
 .admin-status.active { color: var(--accent); background: rgba(173,255,47,.1); }
+.admin-status.online { color: #50f7d1; background: rgba(80,247,209,.11); box-shadow: inset 0 0 0 1px rgba(80,247,209,.12); }
 .admin-status.inactive { color: #929b9f; background: rgba(146,155,159,.1); }
+.admin-status.never { color: #f6b84a; background: rgba(246,184,74,.1); }
 .admin-privacy { display: flex; justify-content: center; align-items: center; gap: 7px; margin: 18px 0 0; color: #687276; font-size: 9px; }
 .admin-privacy svg { width: 13px; }
+.admin-money-value { font-size: clamp(21px, 2.1vw, 31px) !important; overflow-wrap: anywhere; }
+.admin-value-grid,
+.admin-retention-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
+.admin-value-grid .admin-panel > small,
+.admin-retention-card > small,
+.admin-score > small { color: var(--accent); font-size: 9px; font-weight: 850; letter-spacing: .12em; }
+.admin-value-grid .admin-panel > strong { display: block; margin: 10px 0 6px; font-size: clamp(21px, 2.2vw, 30px); letter-spacing: -.04em; }
+.admin-value-grid p,
+.admin-score p,
+.admin-retention-card p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+.admin-adoption { display: grid; gap: 22px; margin-top: 28px; }
+.admin-adoption header { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; font-size: 11px; }
+.admin-adoption header span { color: var(--muted); }
+.admin-adoption > div > div,
+.admin-retention-card > div { height: 7px; overflow: hidden; border-radius: 99px; background: #252b2f; }
+.admin-adoption i,
+.admin-retention-card i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #70ad1e, var(--accent)); }
+.admin-score { display: grid; place-content: center; text-align: center; }
+.admin-score > strong { margin-top: 15px; color: var(--accent); font-size: 58px; letter-spacing: -.06em; }
+.admin-score h2 { margin: 0 0 12px; font-size: 18px; }
+.admin-retention-card > strong { display: block; margin-top: 15px; color: var(--accent); font-size: 42px; letter-spacing: -.05em; }
+.admin-retention-card h2 { margin: 4px 0 8px; font-size: 15px; }
+.admin-retention-card > div { margin-top: 20px; }
+.admin-note { margin: 14px 0 0; padding: 13px 16px; border: 1px solid rgba(173,255,47,.12); border-radius: 12px; background: rgba(173,255,47,.04); color: var(--muted); font-size: 10px; }
+.admin-finance-chart { margin-top: 14px; }
+.admin-double-bars { height: 280px; display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); align-items: end; gap: clamp(8px,3vw,28px); margin-top: 24px; padding: 12px 16px 0; border-bottom: 1px solid var(--border); background: repeating-linear-gradient(to bottom, transparent 0 57px, rgba(255,255,255,.05) 58px 59px); }
+.admin-double-bars > div { height: 100%; display: grid; grid-template-rows: 25px 1fr 26px; align-items: end; justify-items: center; min-width: 0; }
+.admin-double-bars b { max-width: 100%; overflow: hidden; color: var(--muted); font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
+.admin-double-bars > div > div { width: 100%; height: 100%; display: flex; align-items: flex-end; justify-content: center; gap: 5px; }
+.admin-double-bars i { width: min(24px, 38%); min-height: 3px; border-radius: 5px 5px 0 0; }
+.admin-double-bars i.income,
+.admin-chart-legend i.income { background: var(--accent); }
+.admin-double-bars i.expense,
+.admin-chart-legend i.expense { background: #ff4f56; }
+.admin-double-bars span { color: var(--muted); font-size: 10px; text-transform: capitalize; }
+.admin-chart-legend { display: flex; justify-content: center; gap: 18px; margin-top: 14px; color: var(--muted); font-size: 10px; }
+.admin-chart-legend span { display: flex; align-items: center; gap: 6px; }
+.admin-chart-legend i { width: 8px; height: 8px; border-radius: 50%; }
 
 @media (max-width: 1050px) {
   .admin-shell { grid-template-columns: 80px minmax(0, 1fr); }
@@ -2022,6 +2062,8 @@ select {
   .admin-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .admin-profile { min-width: 0; max-width: 180px; }
   .admin-profile span { min-width: 0; overflow: hidden; }
+  .admin-value-grid,
+  .admin-retention-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 720px) {
@@ -2029,7 +2071,7 @@ select {
   .admin-sidebar { position: fixed; z-index: 100; top: auto; bottom: max(5px, env(safe-area-inset-bottom)); left: 50%; width: calc(100vw - 10px); max-width: 430px; height: 66px; padding: 6px; border: 1px solid var(--border); border-radius: 21px; transform: translateX(-50%); backdrop-filter: blur(18px); }
   .admin-brand,
   .admin-side-footer { display: none; }
-  .admin-sidebar nav { height: 100%; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 0; }
+  .admin-sidebar nav { height: 100%; grid-template-columns: repeat(5, 1fr); gap: 2px; margin: 0; }
   .admin-sidebar nav a { min-height: 52px; flex-direction: column; gap: 2px; border-radius: 15px; font-size: 8px; }
   .admin-sidebar nav a.active { box-shadow: none; background: rgba(173,255,47,.1); color: var(--accent); }
   .admin-sidebar nav a svg { width: 18px; }
@@ -2057,6 +2099,11 @@ select {
   .admin-bars { height: 210px; gap: 8px; margin-inline: -8px; padding-inline: 8px; }
   .admin-table-wrap { margin: 18px -18px -18px; }
   .admin-users { margin-top: 10px; }
+  .admin-value-grid,
+  .admin-retention-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
+  .admin-double-bars { height: 235px; gap: 4px; padding-inline: 4px; }
+  .admin-double-bars b { display: none; }
+  .admin-double-bars > div { grid-template-rows: 1fr 26px; }
 }
 
 @media (max-width: 420px) {

@@ -31,7 +31,7 @@ export async function getSessionUser() {
     if (!token) return null;
     const { payload } = await jwtVerify(token, secret());
     if (typeof payload.userId !== "string") return null;
-    return prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: payload.userId },
       select: {
         id: true,
@@ -39,8 +39,22 @@ export async function getSessionUser() {
         email: true,
         currency: true,
         isAdmin: true,
+        lastSeenAt: true,
       },
     });
+    if (!user) return null;
+    const now = new Date();
+    if (!user.lastSeenAt || now.getTime() - user.lastSeenAt.getTime() >= 5 * 60_000) {
+      try {
+        await prisma.$transaction([
+          prisma.user.update({ where: { id: user.id }, data: { lastSeenAt: now } }),
+          prisma.userActivity.create({ data: { userId: user.id } }),
+        ]);
+      } catch {
+        // Falhas de telemetria não devem encerrar uma sessão válida.
+      }
+    }
+    return user;
   } catch {
     return null;
   }

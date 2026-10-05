@@ -36,6 +36,7 @@ model User {
   timezone     String        @default("America/Sao_Paulo")
   isAdmin      Boolean       @default(false)
   lastLoginAt  DateTime?
+  lastSeenAt   DateTime?
   loginCount   Int           @default(0)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -43,6 +44,18 @@ model User {
   transactions Transaction[]
   investments  Investment[]
   goals        Goal[]
+  activities   UserActivity[]
+}
+
+model UserActivity {
+  id        String   @id @default(cuid())
+  userId    String
+  kind      String   @default("activity")
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([createdAt])
 }
 
 model Investment {
