@@ -58,7 +58,9 @@ export function Shell({
   }
 
   return (
-    <div className={`app-shell ${collapsed ? "sidebar-collapsed" : ""}`}>
+    <div
+      className={`app-shell ${collapsed ? "sidebar-collapsed" : ""} ${pathname === "/transactions/new" ? "transaction-entry-shell" : ""}`}
+    >
       <aside className="sidebar">
         <div className="sidebar-header">
           <Link href="/" className="brand" aria-label="Nexo Finance">

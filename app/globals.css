@@ -2631,24 +2631,29 @@ select {
 }
 
 @media (max-width: 680px) {
+  html,
   body {
+    width: 100%;
+    max-width: 100%;
     min-width: 0;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
   .app-shell > main {
     min-width: 0;
     padding-bottom: calc(84px + env(safe-area-inset-bottom));
   }
   .mobile-navigation {
+    position: fixed !important;
     z-index: 1000;
-    left: 8px;
-    right: 8px;
+    inset-inline: 8px;
+    top: auto !important;
     bottom: max(8px, env(safe-area-inset-bottom));
     width: auto;
     max-width: calc(100vw - 16px);
     margin: 0 auto;
     overflow: hidden;
     isolation: isolate;
+    transform: translate3d(0, 0, 0);
   }
   .mobile-navigation a {
     min-width: 0;
@@ -2678,6 +2683,7 @@ select {
     gap: 0;
     padding: 0;
     border-radius: 15px;
+    line-height: 0;
   }
   .topbar-action svg {
     width: 21px;
@@ -2808,10 +2814,53 @@ select {
     grid-column: 2;
   }
   .form-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     margin-bottom: 12px;
+  }
+  .form,
+  .form-grid,
+  .form label,
+  .type-selector {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .form input,
+  .form select {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
   .form-card .form-actions {
     padding-bottom: 8px;
+  }
+  .transaction-entry-shell {
+    width: 100%;
+    min-height: 100svh;
+    overflow-x: clip;
+  }
+  .transaction-entry-shell > main {
+    width: 100%;
+    min-width: 0;
+    padding-bottom: calc(96px + env(safe-area-inset-bottom));
+  }
+  .transaction-entry-shell .content {
+    width: calc(100% - 28px);
+    max-width: 100%;
+    margin-inline: auto;
+    overflow: visible;
+  }
+  .transaction-entry-shell .form-card {
+    padding: 18px;
+    border-radius: 20px;
+  }
+  .transaction-entry-shell .mobile-navigation {
+    position: fixed !important;
+    inset-inline: 8px !important;
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
   }
 }
 
