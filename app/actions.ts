@@ -26,7 +26,12 @@ export async function register(fd: FormData) {
     fail("/register", "Este e-mail já está cadastrado.");
   const { password, ...data } = p.data;
   const user = await prisma.user.create({
-    data: { ...data, passwordHash: await bcrypt.hash(password, 12) },
+    data: {
+      ...data,
+      passwordHash: await bcrypt.hash(password, 12),
+      lastLoginAt: new Date(),
+      loginCount: 1,
+    },
   });
   await createSession(user.id);
   redirect("/");
@@ -39,6 +44,10 @@ export async function login(fd: FormData) {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user || !(await bcrypt.compare(password, user.passwordHash)))
     fail("/login", "E-mail ou senha inválidos.");
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { lastLoginAt: new Date(), loginCount: { increment: 1 } },
+  });
   await createSession(user.id, fd.get("remember") === "on");
   redirect("/");
 }

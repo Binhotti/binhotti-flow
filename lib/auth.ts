@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { SignJWT, jwtVerify } from "jose";
 import { prisma } from "@/lib/prisma";
 const COOKIE = "nexo_finance_session";
@@ -33,7 +33,13 @@ export async function getSessionUser() {
     if (typeof payload.userId !== "string") return null;
     return prisma.user.findUnique({
       where: { id: payload.userId },
-      select: { id: true, name: true, email: true, currency: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        currency: true,
+        isAdmin: true,
+      },
     });
   } catch {
     return null;
@@ -42,5 +48,11 @@ export async function getSessionUser() {
 export async function requireUser() {
   const user = await getSessionUser();
   if (!user) redirect("/login");
+  return user;
+}
+
+export async function requireAdmin() {
+  const user = await requireUser();
+  if (!user.isAdmin) notFound();
   return user;
 }
