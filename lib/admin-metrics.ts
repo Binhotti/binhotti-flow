@@ -39,7 +39,3 @@ export function userStatus(lastSeenAt: Date | null, now = new Date()) {
 export function percentage(value: number, total: number) {
   return total ? Math.round((value / total) * 100) : 0;
 }
-
-export function money(value: number) {
-  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
-}
