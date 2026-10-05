@@ -1937,7 +1937,7 @@ select {
 .admin-profile > svg { width: 22px; color: var(--accent); }
 .admin-profile span { display: grid; gap: 2px; }
 .admin-profile small { color: var(--muted); font-size: 9px; }
-.admin-profile b { font-size: 12px; }
+.admin-profile b { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
 .admin-content { width: min(1280px, calc(100% - 56px)); margin: 28px auto 60px; }
 .admin-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .admin-metric,
@@ -2020,6 +2020,8 @@ select {
   .admin-side-footer a,
   .admin-side-footer button { font-size: 0; }
   .admin-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-profile { min-width: 0; max-width: 180px; }
+  .admin-profile span { min-width: 0; overflow: hidden; }
 }
 
 @media (max-width: 720px) {
@@ -2034,8 +2036,18 @@ select {
   .admin-header { min-height: 148px; padding: calc(20px + env(safe-area-inset-top)) 18px 20px; }
   .admin-header h1 { font-size: 27px; }
   .admin-header > div > span { display: block; max-width: 240px; line-height: 1.4; }
-  .admin-profile { min-width: 0; padding: 11px; }
-  .admin-profile span { display: none; }
+  .admin-profile {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    max-width: 46px;
+    flex: 0 0 46px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+  }
+  .admin-header .admin-profile span { display: none; }
+  .admin-profile > svg { width: 21px; height: 21px; }
   .admin-content { width: calc(100% - 24px); margin: 16px auto 100px; }
   .admin-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .admin-metric { min-height: 160px; padding: 16px; }
