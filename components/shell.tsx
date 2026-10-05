@@ -50,6 +50,10 @@ export function Shell({
     [],
   );
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [pathname]);
+
   function toggleSidebar() {
     setCollapsed((current) => {
       window.localStorage.setItem("sidebar-collapsed", String(!current));
@@ -58,9 +62,7 @@ export function Shell({
   }
 
   return (
-    <div
-      className={`app-shell ${collapsed ? "sidebar-collapsed" : ""} ${pathname === "/transactions/new" ? "transaction-entry-shell" : ""}`}
-    >
+    <div className={`app-shell ${collapsed ? "sidebar-collapsed" : ""}`}>
       <aside className="sidebar">
         <div className="sidebar-header">
           <Link href="/" className="brand" aria-label="Nexo Finance">
