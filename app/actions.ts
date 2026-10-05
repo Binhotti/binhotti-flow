@@ -322,6 +322,52 @@ export async function createGoal(fd: FormData) {
   redirect("/goals?success=Meta criada com sucesso.");
 }
 
+export async function updateGoal(fd: FormData) {
+  const user = await requireUser();
+  const id = String(fd.get("id") ?? "");
+  const name = String(fd.get("name") ?? "").trim();
+  const targetAmount = parseMoney(fd.get("targetAmount"));
+  const currentAmount = parseMoney(fd.get("currentAmount"));
+  const investmentSelection = String(fd.get("investmentId") ?? "");
+  const allInvestments = investmentSelection === "all";
+  const investmentId =
+    investmentSelection && !allInvestments ? investmentSelection : null;
+  const deadlineText = String(fd.get("deadline") ?? "");
+  const deadline = deadlineText ? new Date(`${deadlineText}T12:00:00Z`) : null;
+  const color = String(fd.get("color") ?? "#b8ff45");
+  const investment = investmentId
+    ? await prisma.investment.findFirst({
+        where: { id: investmentId, userId: user.id },
+      })
+    : null;
+
+  if (
+    !id ||
+    !name ||
+    !(targetAmount > 0) ||
+    !(currentAmount >= 0) ||
+    (investmentId && !investment)
+  )
+    fail(`/goals/${id}/edit`, "Preencha os dados da meta corretamente.");
+
+  const result = await prisma.goal.updateMany({
+    where: { id, userId: user.id },
+    data: {
+      name,
+      targetAmount,
+      currentAmount,
+      investmentId,
+      allInvestments,
+      deadline,
+      color,
+    },
+  });
+  if (!result.count) fail("/goals", "Meta não encontrada.");
+  revalidatePath("/");
+  revalidatePath("/goals");
+  redirect("/goals?success=Meta atualizada com sucesso.");
+}
+
 export async function addGoalAmount(fd: FormData) {
   const user = await requireUser();
   const id = String(fd.get("id") ?? "");

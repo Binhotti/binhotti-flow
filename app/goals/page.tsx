@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CalendarDays, PiggyBank, Plus, Target } from "lucide-react";
+import { CalendarDays, Pencil, PiggyBank, Plus, Target } from "lucide-react";
 import { addGoalAmount, deleteGoal } from "@/app/actions";
 import { Flash } from "@/components/flash";
 import { ConfirmButton } from "@/components/confirm-button";
@@ -93,12 +93,17 @@ export default async function GoalsPage({
                   </button>
                 </form>
               )}
-              <form action={deleteGoal} className="card-delete">
-                <input type="hidden" name="id" value={goal.id} />
-                <ConfirmButton
-                  message={`Excluir a meta “${goal.name}”? A caixinha vinculada não será apagada.`}
-                />
-              </form>
+              <div className="investment-actions">
+                <Link href={`/goals/${goal.id}/edit`}>
+                  <Pencil /> Editar
+                </Link>
+                <form action={deleteGoal} className="card-delete">
+                  <input type="hidden" name="id" value={goal.id} />
+                  <ConfirmButton
+                    message={`Excluir a meta “${goal.name}”? A caixinha vinculada não será apagada.`}
+                  />
+                </form>
+              </div>
             </article>
           );
         })}
