@@ -55,12 +55,12 @@ export function Shell({
     <div className={`app-shell ${collapsed ? "sidebar-collapsed" : ""}`}>
       <aside className="sidebar">
         <div className="sidebar-header">
-          <Link href="/" className="brand" aria-label="Binhotti Flow">
+          <Link href="/" className="brand" aria-label="Nexo Finance">
             <span className="brand-mark">
               <BarChart3 />
             </span>
             <span className="brand-name">
-              Binhotti <b>Flow</b>
+              Nexo <b>Finance</b>
             </span>
           </Link>
           <button

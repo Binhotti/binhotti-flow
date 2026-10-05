@@ -1,4 +1,4 @@
-# Binhotti Flow
+# Nexo Finance
 
 Assistente financeiro pessoal feito com Next.js, Node.js, TypeScript, PostgreSQL e Prisma.
 

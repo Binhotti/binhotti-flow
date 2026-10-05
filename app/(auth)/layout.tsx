@@ -13,10 +13,10 @@ export default function AuthLayout({
             <BarChart3 />
           </span>
           <span>
-            Binhotti <b>Flow</b>
+            Nexo <b>Finance</b>
           </span>
         </div>
-        <Image className="auth-phone-art" src="/images/finance-phone-hero.png" alt="Aplicativo Binhotti Flow mostrando um panorama financeiro" width={760} height={900} priority />
+        <Image className="auth-phone-art" src="/images/finance-phone-hero.png" alt="Aplicativo Nexo Finance mostrando um panorama financeiro" width={760} height={900} priority />
         <div className="auth-presentation">
           <p className="eyebrow">CONTROLE SEM COMPLICAÇÃO</p>
           <h1>
@@ -57,7 +57,7 @@ export default function AuthLayout({
             <BarChart3 />
           </span>
           <span>
-            Binhotti <b>Flow</b>
+            Nexo <b>Finance</b>
           </span>
         </div>
         <p className="auth-security">

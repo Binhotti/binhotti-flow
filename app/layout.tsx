@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 export const metadata: Metadata = {
-  title: "Binhotti Flow",
+  title: "Nexo Finance",
   description: "Seu dinheiro, com clareza.",
 };
 export default function RootLayout({

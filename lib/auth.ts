@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SignJWT, jwtVerify } from "jose";
 import { prisma } from "@/lib/prisma";
-const COOKIE = "binhotti_session";
+const COOKIE = "nexo_finance_session";
 function secret() {
   const v = process.env.AUTH_SECRET;
   if (!v) throw new Error("AUTH_SECRET não configurado.");
