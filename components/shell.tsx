@@ -5,12 +5,14 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   BarChart3,
+  Bell,
   ChevronLeft,
   LayoutDashboard,
   LogOut,
   PiggyBank,
   Plus,
   ReceiptText,
+  Search,
   Target,
   WalletCards,
 } from "lucide-react";
@@ -29,11 +31,15 @@ export function Shell({
   title,
   description,
   action,
+  dashboard = false,
+  userName,
 }: {
   children: React.ReactNode;
   title: string;
   description: string;
   action?: { href: string; label: string };
+  dashboard?: boolean;
+  userName?: string;
 }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
@@ -98,18 +104,39 @@ export function Shell({
         </form>
       </aside>
       <main>
-        <header className="topbar">
+        <header className={`topbar ${dashboard ? "dashboard-topbar" : ""}`}>
           <div>
             <p>ASSISTENTE FINANCEIRO</p>
-            <h1>{title}</h1>
+            <h1>
+              {title} {dashboard && <span className="welcome-wave">👋</span>}
+            </h1>
             <span>{description}</span>
           </div>
-          {action && (
-            <Link className="button topbar-action" href={action.href}>
-              <Plus />
-              <span>{action.label}</span>
-            </Link>
+          {dashboard && (
+            <blockquote>“Disciplina hoje, liberdade amanhã.”</blockquote>
           )}
+          <div className="topbar-tools">
+            {dashboard && (
+              <>
+                <button type="button" aria-label="Pesquisar">
+                  <Search />
+                </button>
+                <button type="button" aria-label="Notificações">
+                  <Bell />
+                </button>
+                <span className="profile-pill">
+                  <b>{userName?.charAt(0).toUpperCase()}</b>
+                  <strong>{userName}</strong>
+                </span>
+              </>
+            )}
+            {action && (
+              <Link className="button topbar-action" href={action.href}>
+                <Plus />
+                <span>{action.label}</span>
+              </Link>
+            )}
+          </div>
         </header>
         <div className="content">{children}</div>
       </main>
